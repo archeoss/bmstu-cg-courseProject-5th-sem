@@ -27,7 +27,7 @@ impl Canvas for CanvasPixel
         self.frame[i..i + 4].copy_from_slice(&color);
     }
 
-    fn render(&mut self, surface: &mut [u8])
+    fn copy_to_buffer(&mut self, surface: &mut [u8])
     {
         surface.copy_from_slice(&self.frame);
     }

@@ -5,8 +5,6 @@
 mod app_factory;
 use app_factory::create_app;
 
-use crate::app_factory::app::App;
-use crate::app_factory::canvas::canvas_pixel::CanvasPixel;
 
 fn main()
 {

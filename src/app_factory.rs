@@ -3,8 +3,6 @@ pub mod app_winit;
 pub mod app;
 pub mod canvas;
 
-use std::rc::Rc;
-use std::sync::RwLock;
 use app::App;
 use app_winit::AppPixel;
 
