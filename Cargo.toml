@@ -7,6 +7,37 @@ authors = ["archeoss <archeosAnacritis@gmail.com>"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
+[features]
+optimize = ["log/release_max_level_warn"]
+web = ["wgpu/webgl"]
+default = ["optimize"]
+
 [dependencies]
+#rand = "0.8.5"
+#quicksilver = "0.4.0-alpha5"
 #qt_widgets = "0.5"
-sdl2 = "0.5.0"
+#sdl2 = "0.35.0"
+raw-window-handle = "0.5.0"
+async-trait = "0.1.57"
+log = "0.4"
+pixels = "0.9.0"
+wgpu = "0.12"
+winit = "0.26"
+winit_input_helper = "0.12"
+futures = "0.3.21"
+#shared_slice = "0.0.4"
+#glium = "0.31.0"
+#[dependencies.sdl2]
+#version = "0.35.0"
+#default-features = false
+#features = ["ttf", "image", "gfx"]
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+console_error_panic_hook = "0.1"
+console_log = "0.2"
+wasm-bindgen = "0.2.78"
+wasm-bindgen-futures = "0.4"
+web-sys = "0.3"
+
+[target.'cfg(not(target_arch = "wasm32"))'.dependencies]
+env_logger = "0.9"
+pollster = "0.2"
