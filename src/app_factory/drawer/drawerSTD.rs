@@ -19,6 +19,7 @@ impl DrawerSTD
 
     fn bresenham(&mut self, mut x_start: i32, mut y_start: i32, mut x_end: i32, mut y_end: i32, color: [u8; 4])
     {
+        let mut points = vec![];
         let mut dx = x_end - x_start;
         let mut dy = y_end - y_start;
 
@@ -50,10 +51,12 @@ impl DrawerSTD
             if turned
             {
                 self.canvas.lock().unwrap().point(y_start, x_start, color);
+                points.push((y_start, x_start));
             }
             else
             {
                 self.canvas.lock().unwrap().point(x_start, y_start, color);
+                points.push((x_start, y_start));
             }
 
             if f > 0
@@ -67,6 +70,7 @@ impl DrawerSTD
                 x_start += x_sign;
             }
         }
+        println!("{:?}", points);
         // self.canvas.wait_for_esc();
     }
 
@@ -184,7 +188,7 @@ impl Drawer for DrawerSTD
     }
     fn draw_line(&mut self, mut x_start: i32, mut y_start: i32, x_end: i32, y_end: i32, color: [u8; 4])
     {
-        self.wu(x_start, y_start, x_end, y_end, color);
+        self.bresenham(x_start, y_start, x_end, y_end, color);
     }
     fn draw_line_AA(&mut self, mut x_start: i32, mut y_start: i32, x_end: i32, y_end: i32, color: [u8; 4])
     {

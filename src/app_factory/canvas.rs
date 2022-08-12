@@ -10,18 +10,18 @@ use crate::app_factory::errors;
 #[async_trait]
 pub trait Canvas
 {
-    async fn new(width: u32, height: u32, init_frame: &[u8]) -> Self where Self: Sized;
+    async fn new(width: u32, height: u32, init_frame: &[u8], background_color: [u8; 4]) -> Self where Self: Sized;
     fn point(&mut self, x: i32, y: i32, color: [u8; 4]);
     fn copy_to_buffer(&mut self, surface: &mut [u8]);
     fn get_frame(&mut self) -> &mut [u8];
-    fn resize_surface(&mut self, width: u32, height: u32, new_frame: &[u8]);
+    fn resize_surface(&mut self, width: u32, height: u32, new_frame: &[u8]) -> Result<(), Box<dyn Error>>;
 }
 
 #[async_trait]
 trait CanvasFactory
 {
     type Output;
-    async fn make(&self, width: u32, height: u32, init_frame: &[u8]) -> Self::Output;
+    async fn make(&self, width: u32, height: u32, init_frame: &[u8], background_color: [u8; 4]) -> Self::Output;
 }
 
 pub struct CanvasPixelFactory;
@@ -30,12 +30,12 @@ impl CanvasFactory for CanvasPixelFactory
 {
     type Output = Box<CanvasPixel>;
 
-    async fn make(&self, width: u32, height: u32, init_frame: &[u8])
-                  -> Self::Output { Box::new((CanvasPixel::new(width, height, init_frame)).await) }
+    async fn make(&self, width: u32, height: u32, init_frame: &[u8], background_color: [u8; 4])
+                  -> Self::Output { Box::new((CanvasPixel::new(width, height, init_frame, background_color)).await) }
 }
 
 pub async fn create_canvas
-    (interface: &'static str, width: u32, height: u32, init_frame: &[u8])
+    (interface: &'static str, width: u32, height: u32, init_frame: &[u8], background_color: [u8; 4])
                            -> Result<Box<dyn Canvas>, Box<dyn Error>>
 {
     match interface
@@ -50,7 +50,7 @@ pub async fn create_canvas
         "pixel" =>
             {
                 let factory: Box<dyn CanvasFactory<Output = Box<CanvasPixel>>> = Box::new(CanvasPixelFactory {});
-                let canvas = factory.make(width, height, init_frame);
+                let canvas = factory.make(width, height, init_frame, background_color);
                 Ok(canvas.await)
             }
         _ =>

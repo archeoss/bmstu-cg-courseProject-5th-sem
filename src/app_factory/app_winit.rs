@@ -62,23 +62,22 @@ impl World {
         self.box_y += self.velocity_y;
     }
 
-    fn draw(&self, frame: &mut Box<AppPixel>) {
-        for i in 0..frame.width*frame.height {
-            let x = (i % WIDTH) as i16;
-            let y = (i / WIDTH) as i16;
+    fn draw(&self, frame: &mut [u8]) {for (i, pixel) in frame.chunks_exact_mut(4).enumerate() {
+        let x = (i % WIDTH as usize) as i16;
+        let y = (i / WIDTH as usize) as i16;
 
-            let inside_the_box = x >= self.box_x
-                && x < self.box_x + BOX_SIZE
-                && y >= self.box_y
-                && y < self.box_y + BOX_SIZE;
+        let inside_the_box = x >= self.box_x
+            && x < self.box_x + BOX_SIZE
+            && y >= self.box_y
+            && y < self.box_y + BOX_SIZE;
 
-            let rgba = if inside_the_box {
-                [0x5e, 0x48, 0xe8, 0xff]
-            } else {
-                [0x48, 0xb2, 0xe8, 0xff]
-            };
+        let rgba = if inside_the_box {
+            [0x5e, 0x48, 0xe8, 0xff]
+        } else {
+            [0x48, 0xb2, 0xe8, 0xff]
+        };
 
-            frame.drawer.as_ref().unwrap().lock().unwrap().draw_point(x as i32, y as i32, rgba);
+        pixel.copy_from_slice(&rgba);
         }
     }
 }
@@ -93,18 +92,51 @@ impl AppPixel
     }
 
     // fn get_frame(&mut self) -> &mut [u8] {
-    //     self.canvas.as_mut().unwrap().lock().unwrap().get_frame()
+    //     self.canvas.as_ref().unwrap().lock().unwrap().get_frame()
     // }
-    fn test(&mut self) {
-        self.drawer.as_mut().unwrap().lock().unwrap().draw_point(100, 100, [0x5e, 0x48, 0xe8, 0xff]);
+    fn test(&mut self, world: &mut World) {
+        world.update();
+        // let tmp = self.canvas.clone();
+        // let mut tmp2 = tmp.as_ref().unwrap().lock().unwrap();
+        // let frame = tmp2.get_frame();
+        for i in 0..((self.width-1) as usize * (self.height-1) as usize)  {
+            let x = (i % self.width as usize) as i16;
+            let y = (i / self.width as usize) as i16;
+
+            let inside_the_box = x >= world.box_x
+                && x < world.box_x + BOX_SIZE
+                && y >= world.box_y
+                && y < world.box_y + BOX_SIZE;
+
+            let rgba = if inside_the_box {
+                [0x5e, 0x48, 0xe8, 0xff]
+            } else {
+                [0x48, 0xb2, 0xe8, 0xff]
+            };
+
+            // pixel.copy_from_slice(&rgba);
+            // println!("{} {}", x, y);
+            // println!("app {} {} {}", self.pixels.as_ref().unwrap().borrow_mut().lock().unwrap().get_frame().len(), self.width, self.height);
+            // println!("{}", (self.width-1) as usize * (self.height-1) as usize);
+            self.drawer.as_ref().unwrap().lock().unwrap().draw_point(x as i32, y as i32, rgba);
+
+        }
+        // tmp2.
+        // self.drawer.as_mut().unwrap().lock().unwrap().draw_point(100, 100, [0x5e, 0x48, 0xe8, 0xff]);
+        // self.drawer.as_mut().unwrap().lock().unwrap().draw_line(100, 0, 0, 0, [0x5e, 0x48, 0xe8, 0xff]);
     }
     fn resize_surface(&mut self, width: u32, height: u32)
     {
+        let resize_buffer = width % self.width != 0 || height % self.height != 0;
         self.width = width;
         self.height = height;
-        self.pixels.clone().unwrap().borrow_mut().lock().unwrap().resize_surface(width, height);
+        self.pixels.as_ref().unwrap().lock().unwrap().resize_surface(width, height);
+        if resize_buffer
+        {
+            self.pixels.as_ref().unwrap().lock().unwrap().resize_buffer(width, height);
+        }
         self.canvas.as_ref().unwrap().lock().unwrap().resize_surface(width, height,
-                 self.pixels.clone().unwrap().borrow_mut().lock().unwrap().get_frame());
+                 self.pixels.as_ref().unwrap().lock().unwrap().get_frame());
     }
 }
 #[async_trait(?Send)]
@@ -199,7 +231,8 @@ impl App for AppPixel
             };
         let canvas =
             create_canvas("pixel", self.width, self.height,
-                          pixels.get_frame()).await.expect("Canvas error");
+                          pixels.get_frame(),
+                          [0x48, 0xb2, 0xe8, 0xff]).await.expect("Canvas error");
         self.canvas = Some(Arc::new(Mutex::new(canvas)));
         self.drawer = Some(Arc::new(Mutex::new(create_drawer("std", self.canvas.as_ref().unwrap().clone()).expect("Drawer error"))));
 
@@ -209,7 +242,7 @@ impl App for AppPixel
             // Draw the current frame
             if let Event::RedrawRequested(_) = event {
                 // world.draw(&mut self);
-                self.test();
+                self.test(&mut world);
                 if self
                     .render()
                     .map_err(|e| error!("pixels.render() failed: {}", e.to_string()))
