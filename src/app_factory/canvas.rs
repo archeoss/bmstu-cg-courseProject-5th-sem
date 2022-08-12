@@ -1,8 +1,11 @@
 pub mod canvas_pixel;
 
+use std::error::Error;
 use async_trait::async_trait;
 // pub mod canvas_sdl;  //TODO
 use canvas_pixel::CanvasPixel;
+use errors::notImplError::NotImplError;
+use crate::app_factory::errors;
 
 #[async_trait]
 pub trait Canvas
@@ -28,15 +31,12 @@ impl CanvasFactory for CanvasPixelFactory
     type Output = Box<CanvasPixel>;
 
     async fn make(&self, width: u32, height: u32, init_frame: &[u8])
-                  -> Self::Output
-    {
-        Box::new((CanvasPixel::new(width, height, init_frame)).await)// as Pin<Box<dyn Canvas<W>>>
-    }
+                  -> Self::Output { Box::new((CanvasPixel::new(width, height, init_frame)).await) }
 }
 
 pub async fn create_canvas
     (interface: &'static str, width: u32, height: u32, init_frame: &[u8])
-                           -> Result<Box<dyn Canvas>, &'static str>
+                           -> Result<Box<dyn Canvas>, Box<dyn Error>>
 {
     match interface
     {
@@ -56,7 +56,7 @@ pub async fn create_canvas
         _ =>
             {
                 // panic!("Unknown interface");
-                Err("Unknown interface")
+                Err(Box::new(NotImplError::new(interface)))
             }
     }
 }

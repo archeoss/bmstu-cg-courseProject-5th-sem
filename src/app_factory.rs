@@ -2,7 +2,11 @@ pub mod app_winit;
 // pub mod app_sdl; //TODO
 pub mod app;
 pub mod canvas;
+pub mod drawer;
+pub mod errors;
 
+use std::error::Error;
+use errors::notImplError::NotImplError;
 use app::App;
 use app_winit::AppPixel;
 
@@ -29,7 +33,7 @@ impl AppFactory for WinitFactory
 //     }
 // }
 
-pub fn create_app(interface: &'static str) -> Result<Box<dyn App>, &'static str>
+pub fn create_app(interface: &'static str) -> Result<Box<dyn App>, Box<dyn Error>>
 {
     match interface
     {
@@ -49,7 +53,7 @@ pub fn create_app(interface: &'static str) -> Result<Box<dyn App>, &'static str>
         _ =>
             {
                 // panic!("Unknown interface");
-                Err("Unknown interface")
+                Err(Box::new(NotImplError::new(interface)))
             }
     }
 }

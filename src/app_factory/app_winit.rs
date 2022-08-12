@@ -1,4 +1,4 @@
-use std::borrow::BorrowMut;
+use std::borrow::{BorrowMut};
 use std::error::Error;
 /// Representation of the application state.
 
@@ -14,7 +14,8 @@ use async_trait::async_trait;
 use std::rc::Rc;
 use std::sync::{Arc, Mutex};
 use pixels::{Pixels, SurfaceTexture};
-use winit::event::VirtualKeyCode::Mute;
+use drawer::{create_drawer, Drawer};
+use crate::app_factory::drawer;
 
 const WIDTH: u32 = 640;
 const HEIGHT: u32 = 480;
@@ -32,8 +33,9 @@ pub struct AppPixel
 {
     width: u32,
     height: u32,
-    canvas: Option<Box<dyn Canvas>>,
+    canvas: Option<Arc<Mutex<Box<dyn Canvas>>>>,
     pixels: Option<Arc<Mutex<Pixels>>>,
+    drawer: Option<Arc<Mutex<Box<dyn Drawer>>>>,
 }
 
 impl World {
@@ -60,10 +62,10 @@ impl World {
         self.box_y += self.velocity_y;
     }
 
-    fn draw(&self, frame: &mut [u8]) {
-        for (i, pixel) in frame.chunks_exact_mut(4).enumerate() {
-            let x = (i % WIDTH as usize) as i16;
-            let y = (i / WIDTH as usize) as i16;
+    fn draw(&self, frame: &mut Box<AppPixel>) {
+        for i in 0..frame.width*frame.height {
+            let x = (i % WIDTH) as i16;
+            let y = (i / WIDTH) as i16;
 
             let inside_the_box = x >= self.box_x
                 && x < self.box_x + BOX_SIZE
@@ -76,7 +78,7 @@ impl World {
                 [0x48, 0xb2, 0xe8, 0xff]
             };
 
-            pixel.copy_from_slice(&rgba);
+            frame.drawer.as_ref().unwrap().lock().unwrap().draw_point(x as i32, y as i32, rgba);
         }
     }
 }
@@ -85,21 +87,23 @@ impl AppPixel
 {
     fn render(&mut self) -> Result<(), Box<dyn Error>>
     {
-        self.canvas.as_mut().unwrap().copy_to_buffer(
+        self.canvas.as_ref().unwrap().lock().unwrap().copy_to_buffer(
             self.pixels.clone().unwrap().borrow_mut().lock().unwrap().get_frame());
         self.pixels.clone().unwrap().borrow_mut().lock().unwrap().render().map_err(|e| Box::from(e))
     }
 
-    fn get_frame(&mut self) -> &mut [u8] {
-        self.canvas.as_mut().unwrap().get_frame()
+    // fn get_frame(&mut self) -> &mut [u8] {
+    //     self.canvas.as_mut().unwrap().lock().unwrap().get_frame()
+    // }
+    fn test(&mut self) {
+        self.drawer.as_mut().unwrap().lock().unwrap().draw_point(100, 100, [0x5e, 0x48, 0xe8, 0xff]);
     }
-
     fn resize_surface(&mut self, width: u32, height: u32)
     {
         self.width = width;
         self.height = height;
         self.pixels.clone().unwrap().borrow_mut().lock().unwrap().resize_surface(width, height);
-        self.canvas.as_mut().unwrap().resize_surface(width, height,
+        self.canvas.as_ref().unwrap().lock().unwrap().resize_surface(width, height,
                  self.pixels.clone().unwrap().borrow_mut().lock().unwrap().get_frame());
     }
 }
@@ -113,6 +117,7 @@ impl App for AppPixel
             height,
             canvas: None,
             pixels: None,
+            drawer: None,
         }
     }
 
@@ -195,13 +200,16 @@ impl App for AppPixel
         let canvas =
             create_canvas("pixel", self.width, self.height,
                           pixels.get_frame()).await.expect("Canvas error");
-        self.canvas = Some(canvas);
+        self.canvas = Some(Arc::new(Mutex::new(canvas)));
+        self.drawer = Some(Arc::new(Mutex::new(create_drawer("std", self.canvas.as_ref().unwrap().clone()).expect("Drawer error"))));
+
         self.pixels = Some(Arc::new(Mutex::new(pixels)));
         let mut world = World::new();
         event_loop.run(move |event, _, control_flow| {
             // Draw the current frame
             if let Event::RedrawRequested(_) = event {
-                world.draw(self.get_frame());
+                // world.draw(&mut self);
+                self.test();
                 if self
                     .render()
                     .map_err(|e| error!("pixels.render() failed: {}", e.to_string()))
