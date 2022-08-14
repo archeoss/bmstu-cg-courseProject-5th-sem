@@ -1,5 +1,5 @@
 #![deny(clippy::all)]
-#![deny(elided_lifetimes_in_paths)]
+// #![deny(elided_lifetimes_in_paths)]
 #![forbid(unsafe_code)]
 
 mod app_factory;
@@ -8,7 +8,7 @@ use app_factory::create_app;
 
 fn main()
 {
-    let app = create_app("winit-pixel").unwrap();
+    let app = create_app("slint-pixel").unwrap();
 
     #[cfg(target_arch = "wasm32")]
     {
