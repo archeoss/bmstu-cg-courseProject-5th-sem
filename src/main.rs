@@ -9,6 +9,7 @@ use app_factory::create_app;
 fn main()
 {
     let app = create_app("slint-pixel").unwrap();
+    let app2 = create_app("winit-pixel").unwrap();
 
     #[cfg(target_arch = "wasm32")]
     {
@@ -22,6 +23,7 @@ fn main()
     {
         env_logger::init();
 
-        pollster::block_on(app.run_wasm());
+        app.run();
+        pollster::block_on(app2.run_wasm());
     }
 }
