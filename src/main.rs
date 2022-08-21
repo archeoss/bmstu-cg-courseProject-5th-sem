@@ -1,29 +1,11 @@
-#![deny(clippy::all)]
-// #![deny(elided_lifetimes_in_paths)]
-#![forbid(unsafe_code)]
+slint::include_modules!();
+pub mod app_factory;
+pub mod errors;
 
-mod app_factory;
-use app_factory::create_app;
-
-
-fn main()
+#[cfg_attr(target_arch = "wasm32", wasm_bindgen::prelude::wasm_bindgen(start))]
+pub fn main()
 {
-    let app = create_app("slint-pixel").unwrap();
-    let app2 = create_app("winit-pixel").unwrap();
-
-    #[cfg(target_arch = "wasm32")]
-    {
-        std::panic::set_hook(Box::new(console_error_panic_hook::hook));
-        console_log::init_with_level(log::Level::Trace).expect("error initializing logger");
-        let app = create_app("winit-pixel").unwrap();
-        wasm_bindgen_futures::spawn_local(app.run_wasm());
-
-    }
-    #[cfg(not(target_arch = "wasm32"))]
-    {
-        env_logger::init();
-
-        app.run();
-        pollster::block_on(app2.run_wasm());
-    }
+    // app_factory::launch();
+    let app = (app_factory::create_app("slint-skia")).unwrap();
+    app.launch();
 }

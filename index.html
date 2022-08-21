@@ -1,24 +1,11 @@
-<!DOCTYPE html>
-
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <style type="text/css">
-    body {
-      background-color: #000;
-      margin: 0;
-      overflow: hidden;
-    }
-  </style>
-  <title>Hello Pixels + Web</title>
-</head>
+<html>
 <body>
-<script type="module">
-  import init from "./bmstu-cg-courseProject-5th-sem.js";
-  window.addEventListener("load", () => {
-    init();
-  });
-</script>
+<!-- canvas_factory required by the Slint runtime -->
+<canvas id="canvas"></canvas>
+    <script type="module">
+        // import the generated file.
+        import init from './pkg/bmstu_cg_courseProject_5th_sem.js';
+        init();
+    </script>
 </body>
 </html>
