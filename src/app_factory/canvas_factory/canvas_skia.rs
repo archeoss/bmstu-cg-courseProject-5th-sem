@@ -1,6 +1,6 @@
 use crate::errors;
 // use async_trait::async_trait;
-use errors::wrongSizeErr::WrongSizeErr;
+use errors::wrong_size_err::WrongSizeErr;
 use std::error::Error;
 use crate::app_factory::canvas_factory::canvas::Canvas;
 

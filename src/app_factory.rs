@@ -1,5 +1,5 @@
 use std::error::Error;
-use crate::errors::notImplError::NotImplError;
+use crate::errors::not_impl_error::NotImplError;
 // pub mod slint_mod;
 pub mod app;
 pub mod app_slint;

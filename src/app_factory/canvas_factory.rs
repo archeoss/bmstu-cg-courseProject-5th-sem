@@ -9,7 +9,7 @@ use canvas_skia::CanvasSkia;
 // pub mod canvas_sdl;  //TODO;
 // use canvas_pixel::CanvasPixel;
 use crate::errors;
-use errors::notImplError::NotImplError;
+use errors::not_impl_error::NotImplError;
 
 // #[async_trait]
 trait CanvasFactory {
@@ -31,7 +31,7 @@ impl CanvasFactory for CanvasSkiaFactory {
         width: u32,
         height: u32
     ) -> Self::Output {
-        Box::new((CanvasSkia::new(width, height))/*.await*/)
+        Box::new(CanvasSkia::new(width, height)/*.await*/)
     }
 }
 

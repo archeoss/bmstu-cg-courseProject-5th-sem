@@ -1,2 +1,2 @@
-pub mod notImplError;
-pub mod wrongSizeErr;
+pub mod not_impl_error;
+pub mod wrong_size_err;

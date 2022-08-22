@@ -177,7 +177,7 @@ impl Drawer for DrawerSTD {
     ) {
         self.bresenham(x_start, y_start, x_end, y_end, color);
     }
-    fn draw_line_AA(
+    fn draw_line_aa(
         &mut self,
         mut x_start: i32,
         mut y_start: i32,
