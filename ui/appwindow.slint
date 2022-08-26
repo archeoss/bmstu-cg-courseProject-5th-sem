@@ -1,17 +1,142 @@
-import { Button, VerticalBox } from "std-widgets.slint";
+import { Button, VerticalBox, LineEdit, StandardButton } from "std-widgets.slint";
+//import { MenuBar } from "components.slint";
 
 export AppWindow := Window {
-    property<int> counter: 42;
+    title: "Course Project";
+    property<int> wdth: 1000;
+    property<int> hght: 800;
+    width: wdth * 1px;
+    height: hght * 1px;
+
+    property <int> counter: 0;
+    icon: @image-url("./icons/bmstu.png");
+    property canvas <=> picture.source;
     callback request-increase-value();
-    VerticalBox { 
-        Text {
-            text: "Counter: \{counter}";
+    callback request-increase-valuee();
+
+    //callback draw-line(int) -> image;
+    callback draw-line();
+    HorizontalLayout {
+
+        padding: 0; spacing: 0;
+        //MenuBar {}
+        Rectangle
+        {
+            callback draw-line();
+                background: blue;
+                property<int> active: 0;
+                max-width: 250px;
+                max-height: 200px;
+                VerticalLayout {
+                    padding-left: 0px;
+                    padding-top: 35px;
+                    padding-right: 0px;
+                    padding-bottom: 12px;
+                    spacing: 8px;
+                    VerticalLayout {
+                        // Margin hint for MenuBarTopLabel::Graphic
+                        padding-left: 50px;
+                        padding-top: 0px;
+                        padding-right: 50px;
+                        padding-bottom: 54px;
+
+                        Image {
+                            source: @image-url("icons/bmstu.png");
+                            height: source.height * 1px;
+                        }
+                    }
+                    //###  In the original, the icon is derived from the name
+                    //for entry[idx] in [
+                    //    { name: "Canvas", icon: @image-url("icons/github.png") },
+                    //    { name: "Rooms", icon: @image-url("images/telegram.png") },
+                   //     { name: "Devices", icon: @image-url("images/devices.png") },
+                   //     { name: "Statistics", icon: @image-url("images/statistics.png") },
+                   //     { name: "Storage", icon: @image-url("images/storage.png") },
+                   //     { name: "Members", icon: @image-url("images/members.png") },
+                    //] : MenuItem {
+                    //    name: entry.name;
+                    //    icon: entry.icon;
+                    //    active: root.active == idx;
+                    //}
+                    Rectangle {
+                    property <image> icon <=> i.source;
+                        property<string> name <=> t.text;
+                        property<bool> active;
+                        property<bool> pressed;
+                        callback draw-line();
+
+                        background: active ? rgba(100%, 100%, 100%, 14%) : ma.has-hover ? rgba(100%, 100%, 100%, 9%) : transparent;
+                        popup := PopupWindow {
+                            v := VerticalLayout {
+                                    //Rectangle { height:100%; width: 100%; background: yellow; }
+                                    //x: 20px; y: 20px; height: 150px; width: 150px;
+                                    //StandardButton { kind: ok; }
+                                    //StandardButton { kind: cancel; }
+                                    draw := Button {
+                                        text: "More Info";
+                                        clicked => {
+                                                    root.draw-line();
+                                                    //t.text = "clicked";
+                                                    }
+
+                                    }
+                                    Button {
+                                        text: "More Info2";
+                                        clicked => {
+                                                    root.draw-line();
+                                                    //t.text = "clicked2";
+                                                    }
+                                    }
+                                }
+                            }
+                        ma := TouchArea {
+                            clicked => {popup.show();}
+                        }
+                        HorizontalLayout {
+                            alignment: start;
+                            spacing: 6px;
+                            padding: 8px;
+                            padding-left: 30px;
+                            padding-right: 30px;
+                            i := Image {
+                                source: @image-url("icons/github.png");
+                                width: 14px; // Skin.cpp sets 14 pixels for MenuBarGraphicLabel::Graphic
+                                height: 14px;
+                            }
+                            t := Text {
+                                text: "Canvas";
+                                color: white;
+                                font-size: 10px;
+                            }
+                        }
+                    }
+                    Rectangle {}
+                    //MenuItem { name: "Logout"; icon: @image-url("images/logout.png"); }
+                }
         }
-        Button {
-            text: "Increase value";
-            clicked => { 
-                request-increase-value();
+        Rectangle
+        {
+            //x: 0px;
+            //y: 0px;
+            width: wdth * 1px - 250px;
+            height: hght * 1px;
+            border-width: 3px;
+            border-color: black;
+            border-radius: 10px;
+
+
+            VerticalLayout
+            {
+                padding: 0; spacing: 0;
+                HorizontalLayout {
+
+                    picture := Image {
+                        //source: draw-line(counter);
+                        //width: 650px;
+                        //height: 700px;
+                    }
+                }
             }
         }
-     }
+    }
 }

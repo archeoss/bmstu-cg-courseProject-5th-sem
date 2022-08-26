@@ -6,8 +6,8 @@ pub trait Canvas {
         where
             Self: Sized;
     fn point(&mut self, x: i32, y: i32, color: [u8; 4]);
-    fn copy_to_buffer(&mut self, surface: &mut [u8]);
-    fn get_frame(&mut self) -> &mut [u8];
+    fn copy_to_buffer(&self, surface: &mut [u8]);
+    fn get_frame(&self) -> &[u8];
     fn resize_surface(
         &mut self,
         width: u32,
@@ -16,4 +16,5 @@ pub trait Canvas {
     ) -> Result<(), Box<dyn Error>>;
     fn get_width(&self) -> u32;
     fn get_height(&self) -> u32;
+    fn fill(&mut self, color: [u8; 4]);
 }

@@ -6,6 +6,6 @@ pub mod errors;
 pub fn main()
 {
     // app_factory::launch();
-    let app = (app_factory::create_app("slint-skia")).unwrap();
+    let mut app = (app_factory::create_app("slint-skia")).unwrap();
     app.launch();
 }

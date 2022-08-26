@@ -1,15 +1,17 @@
+use std::cell::RefCell;
 // pub mod canvas_factory;
 use crate::app_factory::drawer::Drawer;
 use std::mem::swap;
+use std::rc::Rc;
 use std::sync::{Arc, Mutex};
 use crate::app_factory::canvas_factory::canvas::Canvas;
 
 pub struct DrawerSTD {
-    canvas: Arc<Mutex<Box<dyn Canvas>>>,
+    canvas: Rc<RefCell<Box<dyn Canvas>>>,
 }
 
 impl DrawerSTD {
-    pub fn new(canvas: Arc<Mutex<Box<dyn Canvas>>>) -> DrawerSTD {
+    pub fn new(canvas: Rc<RefCell<Box<dyn Canvas>>>) -> DrawerSTD {
         DrawerSTD { canvas }
     }
 
@@ -46,10 +48,10 @@ impl DrawerSTD {
         let mut f = incr_b - dx;
         for i in 0..(dx + 1) {
             if turned {
-                self.canvas.lock().unwrap().point(y_start, x_start, color);
+                self.canvas.as_ref().borrow_mut().point(y_start, x_start, color);
                 points.push((y_start, x_start));
             } else {
-                self.canvas.lock().unwrap().point(x_start, y_start, color);
+                self.canvas.as_ref().borrow_mut().point(x_start, y_start, color);
                 points.push((x_start, y_start));
             }
 
@@ -62,7 +64,6 @@ impl DrawerSTD {
                 x_start += x_sign;
             }
         }
-        println!("{:?}", points);
         // self.canvas_factory.wait_for_esc();
     }
 
@@ -159,12 +160,12 @@ impl DrawerSTD {
 }
 
 impl Drawer for DrawerSTD {
-    fn set_canvas(&mut self, canvas: Arc<Mutex<Box<dyn Canvas>>>) {
+    fn set_canvas(&mut self, canvas: Rc<RefCell<Box<dyn Canvas>>>) {
         self.canvas = canvas;
     }
 
     fn draw_point(&mut self, x: i32, y: i32, color: [u8; 4]) {
-        self.canvas.lock().unwrap().point(x, y, color);
+        self.canvas.as_ref().borrow_mut().point(x, y, color);
         // self.canvas_factory.wait_for_esc();
     }
     fn draw_line(
@@ -190,5 +191,17 @@ impl Drawer for DrawerSTD {
     fn draw_ellipse(&mut self, x: i32, y: i32, width: i32, height: i32, color: [u8; 4]) {
         // self.canvas_factory.ellipse(x, y, width, height, color);
         // self.canvas_factory.wait_for_esc();
+    }
+
+    fn copy_to(&self, buffer: &mut [u8]) {
+        buffer.copy_from_slice(self.canvas.as_ref().borrow().get_frame());
+    }
+
+    fn fill(&mut self, color: [u8; 4]) {
+        self.canvas.as_ref().borrow_mut().fill(color);
+    }
+
+    fn get_frame(&self) -> Vec<u8> {
+        self.canvas.as_ref().borrow().get_frame().to_vec()
     }
 }

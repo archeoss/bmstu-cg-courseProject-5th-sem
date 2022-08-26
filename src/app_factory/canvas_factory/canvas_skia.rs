@@ -19,7 +19,7 @@ impl Canvas for CanvasSkia {
         CanvasSkia {
             width,
             height,
-            frame: Vec::with_capacity((width * height) as usize)
+            frame: vec![0 as u8; (width * height * 4) as usize]
         }
     }
     fn point(&mut self, x: i32, y: i32, color: [u8; 4]) {
@@ -28,12 +28,18 @@ impl Canvas for CanvasSkia {
         self.frame[i..i + 4].copy_from_slice(&color);
     }
 
-    fn copy_to_buffer(&mut self, surface: &mut [u8]) {
+    fn fill(&mut self, color: [u8; 4]) {
+        for chunk in self.frame.chunks_exact_mut(4) {
+            chunk.copy_from_slice(&color);
+        }
+    }
+
+    fn copy_to_buffer(&self, surface: &mut [u8]) {
         surface.copy_from_slice(&self.frame);
     }
 
-    fn get_frame(&mut self) -> &mut [u8] {
-        &mut self.frame[..]
+    fn get_frame(&self) -> &[u8] {
+        &self.frame[..]
     }
 
     fn get_width(&self) -> u32 {

@@ -14,7 +14,8 @@ path = "src/main.rs"
 crate-type = ["cdylib"]
 
 [dependencies]
-slint = "0.2"
+slint = "0.2.5"
+tiny-skia = "0.7"
 
 [target.'cfg(target_arch = "wasm32")'.dependencies]
 wasm-bindgen = { version = "0.2" }
