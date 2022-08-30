@@ -1,5 +1,5 @@
 use std::ops;
-use cgmath::{ Matrix4 };
+use cgmath::{Matrix4, Transform};
 
 #[derive(Copy, Clone)]
 pub struct Point
@@ -107,7 +107,7 @@ impl Point
         let mat = x_mat * y_mat * z_mat;
 
         let (x, y, z) = self.get_position();
-        let (x, y, z) = mat.transform_point(x, y, z);
+        // let (x, y, z) = mat.transform_point(x, y, z);
         self.set_position(x, y, z);
     }
 }

@@ -1,17 +1,21 @@
 use std::error::Error;
-use std::fs::File;
 use crate::custom_loader::loader::{FrameLoaderFactory, LoaderFactory};
+use crate::models::frame_model::{FrameFigure, FrameModel};
 use crate::models::model::Model;
-struct LoadManager;
+pub struct LoadManager;
 impl LoadManager {
     // ...
-    pub fn load(&mut self, path: &str, model_type: &str) -> Result<Box<dyn Model>, dyn Error>
+    pub fn new() -> Self {
+        LoadManager
+    }
+
+    pub fn load(&mut self, path: &str, model_type: &str) -> Result<Box<dyn Model<Output = FrameFigure>>, Box<dyn Error>>
     {
         match model_type
         {
             "frame" => {
-                let mut loader = FrameLoaderFactory::create();
-                let model = loader.load(model_type)?;
+                let mut loader = FrameLoaderFactory::create()?;
+                let model = loader.load(path)?;
 
                 Ok(model)
             },

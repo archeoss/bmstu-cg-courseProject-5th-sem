@@ -2,12 +2,15 @@ slint::include_modules!();
 use std::borrow::Borrow;
 use std::cell::RefCell;
 use std::rc::Rc;
-use std::sync::{Arc, Mutex};
+// use std::sync::{Arc, Mutex};
 use slint::{Image, Rgba8Pixel, SharedPixelBuffer};
+use crate::models::frame_model::FrameModel;
 use crate::app_factory::canvas_factory::canvas::Canvas;
 use crate::app_factory::app::{MainApp};
 use crate::app_factory::canvas_factory::create_canvas;
 use crate::app_factory::drawer::{create_drawer, Drawer};
+use crate::managers::load_manager::{LoadManager};
+
 pub struct SlintApp
 {
     width: u32,
@@ -117,9 +120,13 @@ impl MainApp for SlintApp
             let image =
                 Image::from_rgba8_premultiplied(pixel_buffer);
             ui.set_canvas(image.clone());
+            let mut load_manager = LoadManager::new();
+            let model = load_manager.load("./model/cube.txt", "frame").unwrap();
+            // let figure = model.get_model().borrow_mut();
+            // println!("{:?}", model.get_model().borrow_mut().get_model().get_points_mut());
             // image
             // Image::from_rgba8_premultiplied(pixel_buffer)
-        });
+            });
         ui.run();
     }
 }

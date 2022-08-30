@@ -1,5 +1,3 @@
-use std::ops;
-
 #[derive(Copy, Clone)]
 pub struct Edge
 {
@@ -13,7 +11,7 @@ impl Edge
     {
         Edge
         {
- x           from,
+            from,
             to,
         }
     }

@@ -11,14 +11,14 @@ pub use crate::objects::object::Object;
 pub use crate::objects::visibility::Visibilty;
 pub use crate::managers::visitor::Visitor;
 
-#[derive(Copy, Clone)]
+#[derive(Clone)]
 pub struct FrameFigure
 {
     points: Vec<Point>,
     edges: Vec<Edge>,
 }
 
-#[derive(Copy, Clone)]
+#[derive(Clone)]
 pub struct FrameModel
 {
     figure: Rc<RefCell<FrameFigure>>,
@@ -146,6 +146,10 @@ impl Model for FrameModel
     {
         self.figure.clone()
     }
+
+    fn transform(&mut self, transform: Matrix4<f32>) {
+        self.transform = self.transform * transform;
+    }
 }
 
 impl Visibilty for FrameModel
@@ -166,9 +170,9 @@ impl Object for FrameModel
     {
         false
     }
-    fn accept(&mut self, visitor: &mut dyn Visitor<Self>)
+    fn accept(&mut self, visitor: &mut dyn Visitor)
     {
-        visitor.visit(self);
+        visitor.visit_model(self);
     }
     fn transform(&mut self, transform: Matrix4<f32>)
     {

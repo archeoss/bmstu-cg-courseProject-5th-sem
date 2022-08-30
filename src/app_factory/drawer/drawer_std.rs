@@ -3,7 +3,7 @@ use std::cell::RefCell;
 use crate::app_factory::drawer::Drawer;
 use std::mem::swap;
 use std::rc::Rc;
-use std::sync::{Arc, Mutex};
+// use std::sync::{Arc, Mutex};
 use crate::app_factory::canvas_factory::canvas::Canvas;
 
 pub struct DrawerSTD {

@@ -11,15 +11,15 @@ pub trait Loader<T>
 
 pub trait LoaderFactory<T>
 {
-    fn create() -> Result<Box<dyn Loader<T>>, dyn Error>;
+    fn create() -> Result<Box<dyn Loader<T>>, Box<dyn Error>>;
 }
 
 pub struct FrameLoaderFactory;
 
 impl LoaderFactory<FrameModel> for FrameLoaderFactory
 {
-    fn create() -> Box<dyn Loader<FrameModel>>
+    fn create() -> Result<Box<dyn Loader<FrameModel>>, Box<dyn Error>>
     {
-        Box::new(model_loader::ModelLoader::new())
+        Ok(Box::new(model_loader::ModelLoader::new()))
     }
 }

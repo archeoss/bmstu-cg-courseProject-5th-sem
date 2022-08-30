@@ -1,3 +1,4 @@
+use std::borrow::BorrowMut;
 use std::cell::RefCell;
 use std::error::Error;
 use std::rc::Rc;
@@ -40,9 +41,9 @@ impl FrameModelBuilder
 
 impl Builder<FrameModel> for FrameModelBuilder
 {
-    fn build(&mut self) -> Result<Box<FrameModel>, dyn Error>
+    fn build(&mut self) -> Result<Box<FrameModel>, Box<dyn Error>>
     {
-        let figure = FrameFigure::new_with_points_and_edges(self.points?, self.edges?);
+        let figure = FrameFigure::new_with_points_and_edges(self.points.clone().ok_or("")?, self.edges.clone().ok_or("")?);
         let figure = Rc::new(RefCell::new(figure));
 
         Ok(Box::new(FrameModel::new(figure)))
