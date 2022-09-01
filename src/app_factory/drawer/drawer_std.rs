@@ -1,10 +1,13 @@
 use std::cell::RefCell;
 // pub mod canvas_factory;
-use crate::app_factory::drawer::Drawer;
+use crate::app_factory::drawer::{Drawer, FrameDrawer};
 use std::mem::swap;
 use std::rc::Rc;
+use cgmath::Matrix4;
 // use std::sync::{Arc, Mutex};
 use crate::app_factory::canvas_factory::canvas::Canvas;
+use crate::models::frame_model::{FrameFigure, FrameModel, Point};
+use crate::models::model::Model;
 
 pub struct DrawerSTD {
     canvas: Rc<RefCell<Box<dyn Canvas>>>,
@@ -23,6 +26,7 @@ impl DrawerSTD {
         mut y_end: i32,
         color: [u8; 4],
     ) {
+        let mut canvas = self.canvas.as_ref().borrow_mut();
         let mut points = vec![];
         let mut dx = x_end - x_start;
         let mut dy = y_end - y_start;
@@ -48,10 +52,10 @@ impl DrawerSTD {
         let mut f = incr_b - dx;
         for i in 0..(dx + 1) {
             if turned {
-                self.canvas.as_ref().borrow_mut().point(y_start, x_start, color);
+                canvas.point(y_start, x_start, color);
                 points.push((y_start, x_start));
             } else {
-                self.canvas.as_ref().borrow_mut().point(x_start, y_start, color);
+                canvas.point(x_start, y_start, color);
                 points.push((x_start, y_start));
             }
 
@@ -180,14 +184,15 @@ impl Drawer for DrawerSTD {
     }
     fn draw_line_aa(
         &mut self,
-        mut x_start: i32,
-        mut y_start: i32,
+        x_start: i32,
+        y_start: i32,
         x_end: i32,
         y_end: i32,
         color: [u8; 4],
     ) {
         self.wu(x_start, y_start, x_end, y_end, color);
     }
+
     fn draw_ellipse(&mut self, x: i32, y: i32, width: i32, height: i32, color: [u8; 4]) {
         // self.canvas_factory.ellipse(x, y, width, height, color);
         // self.canvas_factory.wait_for_esc();
@@ -203,5 +208,32 @@ impl Drawer for DrawerSTD {
 
     fn get_frame(&self) -> Vec<u8> {
         self.canvas.as_ref().borrow().get_frame().to_vec()
+    }
+}
+
+impl FrameDrawer for DrawerSTD
+{
+    fn draw_frame_model(&mut self, frame_model: Rc<RefCell<Box<dyn Model<Output=FrameFigure>>>>)
+    {
+
+        let figure_rc = frame_model.as_ref().borrow().get_model();
+        let figure = figure_rc.as_ref().borrow_mut();
+        let tr = frame_model.as_ref().borrow().get_transform();
+        let points = figure.get_points();
+        let edges = figure.get_edges();
+
+
+        let height = self.canvas.as_ref().borrow_mut().get_height();
+        let width = self.canvas.as_ref().borrow_mut().get_width();
+        let center = Point::new(width as f32 / 2.0, height as f32 / 2.0, 0.0);
+        for i in 0..edges.len()
+        {
+            let edge = edges[i];
+            let start = points[edge.from as usize];
+            let end = points[edge.to as usize];
+            let start = center - start.transform(&tr);
+            let end = center - end.transform(&tr);
+            self.draw_line(start.get_x() as i32, start.get_y() as i32, end.get_x() as i32, end.get_y() as i32, [0, 255, 255, 255]);
+        }
     }
 }

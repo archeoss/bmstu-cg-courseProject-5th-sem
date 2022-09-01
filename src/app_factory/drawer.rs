@@ -1,6 +1,7 @@
 use std::cell::RefCell;
 use std::error::Error;
 use std::rc::Rc;
+use crate::models::frame_model::{FrameFigure, FrameModel};
 // use std::sync::{Arc, Mutex};
 // use errors::notImplError::NotImplError;
 use crate::errors::not_impl_error::NotImplError;
@@ -8,6 +9,7 @@ use crate::errors::not_impl_error::NotImplError;
 pub mod drawer_std;
 use drawer_std::DrawerSTD;
 use crate::app_factory::canvas_factory::canvas::Canvas;
+use crate::models::model::Model;
 
 pub trait Drawer {
     fn set_canvas(&mut self, canvas: Rc<RefCell<Box<dyn Canvas>>>);
@@ -20,31 +22,49 @@ pub trait Drawer {
     fn get_frame(&self) -> Vec<u8>;
 }
 
-trait DrawerFactory {
-    fn make(&self, canvas: Rc<RefCell<Box<dyn Canvas>>>) -> Box<dyn Drawer>;
+pub trait FrameDrawer: Drawer {
+    fn draw_frame_model(&mut self, frame_model: Rc<RefCell<Box<dyn Model<Output = FrameFigure>>>>);
+}
+
+trait DrawerFactory<Trait> {
+    fn make(&self, canvas: Rc<RefCell<Box<dyn Canvas>>>) -> Box<Trait>;
 }
 
 pub struct FactoryDrawerSTD;
 
-impl DrawerFactory for FactoryDrawerSTD {
-    fn make(&self, canvas: Rc<RefCell<Box<dyn Canvas>>>) -> Box<dyn Drawer> {
+impl DrawerFactory<DrawerSTD> for FactoryDrawerSTD {
+    fn make(&self, canvas: Rc<RefCell<Box<dyn Canvas>>>) -> Box<DrawerSTD> {
         Box::new(DrawerSTD::new(canvas))
     }
 }
+
+// I didn't find a way to implement this via single function
+// I'm dumb
 
 pub fn create_drawer(
     interface: &'static str,
     canvas: Rc<RefCell<Box<dyn Canvas>>>,
 ) -> Result<Box<dyn Drawer>, Box<dyn Error>> {
     match interface {
-        // "sdl" =>     // TODO
-        // {
-        //     let factory: Box<dyn Factory> = Box::new(SDLFactory {});
-        //     let canvas_factory = factory.make(600, 600);
-        //     Ok(canvas_factory)
-        // }
         "std" => {
-            let factory: Box<dyn DrawerFactory> = Box::new(FactoryDrawerSTD {});
+            let factory: Box<dyn DrawerFactory<DrawerSTD>> = Box::new(FactoryDrawerSTD {});
+            let drawer = factory.make(canvas);
+            Ok(drawer)
+        }
+        _ => {
+            // panic!("Unknown interface");
+            Err(Box::new(NotImplError::new(interface)))
+        }
+    }
+}
+
+pub fn create_frame_drawer(
+    interface: &'static str,
+    canvas: Rc<RefCell<Box<dyn Canvas>>>,
+) -> Result<Box<dyn FrameDrawer>, Box<dyn Error>> {
+    match interface {
+        "std" => {
+            let factory: Box<dyn DrawerFactory<DrawerSTD>> = Box::new(FactoryDrawerSTD {});
             let drawer = factory.make(canvas);
             Ok(drawer)
         }

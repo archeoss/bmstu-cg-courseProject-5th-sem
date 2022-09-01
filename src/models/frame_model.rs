@@ -122,6 +122,20 @@ impl FrameFigure
     {
         &mut self.edges[index]
     }
+
+    pub fn get_center(&self) -> Point
+    {
+        let mut max = self.points[0];
+        let mut min = self.points[0];
+
+        for point in &self.points
+        {
+            max = Point::new(max.get_x().max(point.get_x()), max.get_y().max(point.get_y()), max.get_z().max(point.get_z()));
+            min = Point::new(min.get_x().min(point.get_x()), min.get_y().min(point.get_y()), min.get_z().min(point.get_z()));
+        }
+
+        (max + min) / Point::new(2.0, 2.0, 2.0)
+    }
 }
 
 impl FrameModel
@@ -147,6 +161,14 @@ impl Model for FrameModel
         self.figure.clone()
     }
 
+    fn get_center(&self) -> Point {
+        self.figure.borrow().get_center()
+    }
+
+    fn get_transform(&self) -> Matrix4<f32>
+    {
+        self.transform
+    }
     fn transform(&mut self, transform: Matrix4<f32>) {
         self.transform = self.transform * transform;
     }
@@ -187,15 +209,3 @@ impl Object for FrameModel
     //     String::from("FrameModel")
     // }
 }
-
-
-
-
-
-
-
-
-
-
-
-

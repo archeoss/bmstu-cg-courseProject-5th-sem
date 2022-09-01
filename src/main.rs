@@ -10,6 +10,7 @@ pub mod custom_loader;
 pub fn main()
 {
     // app_factory::launch();
-    let mut app = (app_factory::create_app("slint-skia")).unwrap();
+    let mut factory = (app_factory::create_app("slint-skia")).unwrap();
+    let mut app = factory.make(750, 800);
     app.launch();
 }

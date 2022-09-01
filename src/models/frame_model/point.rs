@@ -1,5 +1,5 @@
 use std::ops;
-use cgmath::{Matrix4, Transform};
+use cgmath::{Matrix4, Point3, Transform, Vector4};
 
 #[derive(Copy, Clone)]
 pub struct Point
@@ -56,6 +56,14 @@ impl Point
         self.x = x;
         self.y = y;
         self.z = z;
+    }
+
+    pub(crate) fn transform(&self, transform: &Matrix4<f32>) -> Point
+    {
+        let mut point = Point3::<f32>::new(self.x as f32, self.y as f32, self.z as f32);
+        point = transform.transform_point(point);
+
+        Point::new(point.x, point.y, point.z)
     }
 
     fn move_coord(&mut self, x: f32, y: f32, z: f32)
@@ -140,6 +148,7 @@ impl ops::Sub for Point
     }
 }
 
+// impl ops::Mul for Matrix4<>
 impl ops::Mul for Point
 {
     type Output = Point;

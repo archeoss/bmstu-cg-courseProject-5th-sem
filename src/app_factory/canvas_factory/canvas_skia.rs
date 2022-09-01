@@ -25,7 +25,10 @@ impl Canvas for CanvasSkia {
     fn point(&mut self, x: i32, y: i32, color: [u8; 4]) {
         let i = ((x + y * self.width as i32) * 4) as usize;
 
-        self.frame[i..i + 4].copy_from_slice(&color);
+        if i + 3 < self.frame.len() && i > 0
+        {
+            self.frame[i..i + 4].copy_from_slice(&color);
+        }
     }
 
     fn fill(&mut self, color: [u8; 4]) {

@@ -14,8 +14,10 @@ export AppWindow := Window {
     callback request-increase-value();
     callback request-increase-valuee();
 
-    //callback draw-line(int) -> image;
-    callback draw-line();
+    callback move-model();
+    callback scale-model();
+    callback rotate-model();
+    callback draw-frame-model();
     HorizontalLayout {
 
         padding: 0; spacing: 0;
@@ -73,17 +75,31 @@ export AppWindow := Window {
                                     //StandardButton { kind: ok; }
                                     //StandardButton { kind: cancel; }
                                     draw := Button {
-                                        text: "More Info";
+                                        text: "Draw Frame Model";
                                         clicked => {
-                                                    root.draw-line();
+                                                    root.draw-frame-model();
                                                     //t.text = "clicked";
                                                     }
 
                                     }
                                     Button {
-                                        text: "More Info2";
+                                        text: "Move Model";
                                         clicked => {
-                                                    root.draw-line();
+                                                    root.move-model();
+                                                    //t.text = "clicked2";
+                                                    }
+                                    }
+                                    Button {
+                                        text: "Rotate Model";
+                                        clicked => {
+                                                    root.rotate-model();
+                                                    //t.text = "clicked2";
+                                                    }
+                                    }
+                                    Button {
+                                        text: "Scale Model";
+                                        clicked => {
+                                                    root.scale-model();
                                                     //t.text = "clicked2";
                                                     }
                                     }
