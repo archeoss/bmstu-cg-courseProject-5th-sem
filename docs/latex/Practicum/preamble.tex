@@ -1,0 +1,25 @@
+\usepackage{pdfpages}
+
+\usepackage{listings-rust}
+\usepackage{xcolor}
+\usepackage{amsmath}
+
+\lstdefinestyle{rust}{
+    language=Rust,
+    backgroundcolor=\color{white},
+    basicstyle=\footnotesize\ttfamily,
+    keywordstyle=\color{purple},
+    stringstyle=\color{green},
+    commentstyle=\color{gray},
+    numbers=left,
+    stepnumber=1,
+    numbersep=5pt,
+    frame=single,
+    tabsize=4,
+    captionpos=t,
+    breaklines=true,
+    breakatwhitespace=true,
+    escapeinside={\#*}{*)},
+    morecomment=[l][\color{magenta}]{\#},
+    columns=fullflexible
+}
