@@ -3,33 +3,72 @@
 \section{Средства реализации}
 
 Основным языком программирования является мультипарадигменный язык Rust\cite{rust}.
-Одно из главных достоинств данного языка это гарантия безопасной работы с памятью при помощи системы
-статической проверки ссылок, так называемый Borrow Checker\cite{borrow-checker}.
-Важно отметить, что язык программирования Rust сопоставим по скорости с такими языками как С и С++,
-предоставляя в то же время более широкий функционал для тестирования и контроля памяти.
+\begin{itemize}
+    \item[$-$] Одно из главных достоинств данного языка это гарантия безопасной работы с памятью при помощи системы
+    статической проверки ссылок, так называемый Borrow Checker\cite{borrow-checker}.
+    \item[$-$] Отсутствие сброщика мусора, как следствие, более экономная работа с ресурсами
+    \item[$-$] Встроенный компилятор
+    \item[$-$] Кросс-платформенность, от UNIX и MacOS до Web
+    \item[$-$] Крайне побдробные коды ошибки и документация от разработчиков языка
+    \item[$-$] Важно отметить, что язык программирования Rust сопоставим по скорости с такими языками как С и С++,
+    предоставляя в то же время более широкий функционал для тестирования кода и контроля памяти.
+\end{itemize}
 
-В качестве графического интерфейса была выбрана библиотека Slint\cite{slint}
-(или иначе crate в контексте языка Rust) в связке с библиотекой tiny-skia\cite{tiny-skia}
-для рендеринга изображения при помощи процессора.
-Выбранная графическая библиотека предоставляет методы для работы с непосредственным пиксельным видеобуфером,
-а также крайне гибкую настройку пользовательского интерфейса.
-Помимо этого Slint дает инструментарий для запуска приложения в браузере при непосредственном участии WebAssembly
-при практически нулевых затратах со стороны программиста.
+Также были выбраны следующие библиотеки:
+\begin{itemize}
+    \item[$-$] В качестве графического интерфейса была выбрана библиотека Slint\cite{slint} (или иначе crate в контексте языка Rust)
+    \item[$-$] Для рендера изображения была выбрана библиотека tiny-skia\cite{tiny-skia}, предоставляющий быстрый CPU-рендеринг
+    \item[$-$] Помимо этого Slint дает инструментарий для запуска приложения в браузере при непосредственном участии WebAssembly при практически нулевых затратах со стороны программиста.
+    \item[$-$] Для тестирования ПО использовались инструменты Cargo\cite{cargo} - пакетного менеджера языка Rust, поставляемого вместе с компилятором из официального источника.
+\end{itemize}
 
-Для тестирования ПО использовались инструменты Cargo\cite{cargo} - пакетного менеджера языка Rust,
-поставляемого вместе с компилятором из официального источника.
+Среда разработки:
+\begin{itemize}
+    \item Работа была проведена в среде разработки CLion\cite{clion} от компании JetBrains\cite{JB}
+    \item Дополнительный плагин "Rust" для поддержки синтаксиса языка.
+\end{itemize}
 
-Работа была проведена в среде разработки CLion\cite{clion} от компании JetBrains\cite{JB}
-с дополнительным плагином "Rust" для поддержки синтаксиса языка.
+\section{Структура классов}
 
+На рисунках \ref{img:classes_A} - \ref{img:classes_B} представлена структура реализуемых классов.
+
+\includeimage
+{classes_A} % Имя файла без расширения (файл должен быть расположен в директории inc/img/)
+{f} % Обтекание (с обтеканием)
+{h} % Положение рисунка (см. wrapfigure из пакета wrapfig)
+{0.7\textwidth} % Ширина рисунка
+{Структура классов-объектов} % Подпись рисунка
+
+\begin{itemize}
+    \item Point – класс точки трехмерного пространства. Хранит координаты в пространстве, владеет методами преобразований точки.
+    \item Edge – класс грани. Хранит номера задействованных в грани вершин.
+    \item Light – класс источника света.
+    \item Model - класс модели. Скрывает конкретную реализацию модели(фигуры) и предоставляет единый интерфейс для работы с ней. Владеет методами преобразования модели, а также методами для получения информации о модели.
+    \item Composite - класс композита. Хранит в себе набор моделей, владеет методами для работы с ними.
+\end{itemize}
+
+\includeimage
+{classes_B} % Имя файла без расширения (файл должен быть расположен в директории inc/img/)
+{f} % Обтекание (с обтеканием)
+{h} % Положение рисунка (см. wrapfigure из пакета wrapfig)
+{0.7\textwidth} % Ширина рисунка
+{Структура классов} % Подпись рисунка
+
+\begin{itemize}
+    \item Drawer – класс, отвечающий за растеризацию сцены. Хранит полотно для отрисовки. Владеет методами алгоритма теневого z-буфера и формирования объекта для отображения рисунка в главном приложении.
+    \item App – точка входа в программу.
+    \item Ui - класс, отвечающий за отображение графического интерфейса.
+    \item TransformManager – абстракция, содержащия методы трансформмации объектов.
+    \item TransformManager - абстракция, содержащия методы загрузки объектов.
+    \item Canvas - класс, отвечающий за отображение сцены.
+\end{itemize}
 \section{Реализация алгоритмов}
 
 В листинге \ref{lst:zBuffer} представлена реализация Z-буффера на языке Rust.
-В листинге \ref{lst:frame_model} представлена реализация проволочной фигуры.
+%В листинге \ref{lst:frame_model} представлена реализация проволочной фигуры.
 
 \begin{lstlisting}[style=rust, label=lst:zBuffer, caption={Реализация алгоритма Z-буффера}]
-
-    #[derive(Copy, Clone)]
+#[derive(Copy, Clone)]
 pub struct Vector3D<T> {
     pub x: T,
     pub y: T,
@@ -98,183 +137,181 @@ impl<T: Mul<Output = T> + Sub<Output = T> + Copy> BitXor for Vector3D<T> {
 }
 \end{lstlisting}
 
-\begin{lstlisting}[style=rust, label=lst:frame_model, caption={Реализация проволочной модели}]
-...
-// includes
-...
-#[derive(Clone)]
-pub struct FrameFigure
-{
-    points: Vec<Point>,
-    edges: Vec<Edge>,
-}
-
-#[derive(Clone)]
-pub struct FrameModel
-{
-    figure: Rc<RefCell<FrameFigure>>,
-    transform: Matrix4<f32>,
-}
-
-impl FrameFigure
-{
-    pub fn new() -> FrameFigure
-    {
-        FrameFigure
-        {
-            points: Vec::new(),
-            edges: Vec::new(),
-        }
-    }
-
-    pub fn new_with_points(points: Vec<Point>) -> FrameFigure
-    {
-        FrameFigure
-        {
-            points,
-            edges: Vec::new(),
-        }
-    }
-
-    pub fn new_with_edges(edges: Vec<Edge>) -> FrameFigure
-    {
-        FrameFigure
-        {
-            points: Vec::new(),
-            edges,
-        }
-    }
-
-    pub fn new_with_points_and_edges(points: Vec<Point>, edges: Vec<Edge>) -> FrameFigure
-    {
-        FrameFigure
-        {
-            points,
-            edges,
-        }
-    }
-
-    pub fn get_points(&self) -> &Vec<Point>
-    {
-        &self.points
-    }
-
-    pub fn get_edges(&self) -> &Vec<Edge>
-    {
-        &self.edges
-    }
-
-    pub fn get_points_mut(&mut self) -> &mut Vec<Point>
-    {
-        &mut self.points
-    }
-
-    pub fn get_edges_mut(&mut self) -> &mut Vec<Edge>
-    {
-        &mut self.edges
-    }
-
-    pub fn add_point(&mut self, point: Point)
-    {
-        self.points.push(point);
-    }
-
-    pub fn add_edge(&mut self, edge: Edge)
-    {
-        self.edges.push(edge);
-    }
-
-    pub fn remove_point(&mut self, index: usize)
-    {
-        self.points.remove(index);
-    }
-
-    pub fn remove_edge(&mut self, index: usize)
-    {
-        self.edges.remove(index);
-    }
-
-    pub fn get_point(&self, index: usize) -> &Point
-    {
-        &self.points[index]
-    }
-
-    pub fn get_edge(&self, index: usize) -> &Edge
-    {
-        &self.edges[index]
-    }
-
-    pub fn get_point_mut(&mut self, index: usize) -> &mut Point
-    {
-        &mut self.points[index]
-    }
-
-    pub fn get_edge_mut(&mut self, index: usize) -> &mut Edge
-    {
-        &mut self.edges[index]
-    }
-
-    pub fn get_center(&self) -> Point
-    {
-        let mut max = self.points[0];
-        let mut min = self.points[0];
-
-        for point in &self.points
-        {
-            max = Point::new(max.get_x().max(point.get_x()), max.get_y().max(point.get_y()), max.get_z().max(point.get_z()));
-            min = Point::new(min.get_x().min(point.get_x()), min.get_y().min(point.get_y()), min.get_z().min(point.get_z()));
-        }
-
-        (max + min) / Point::new(2.0, 2.0, 2.0)
-    }
-}
-
-impl FrameModel
-{
-    pub(crate) fn new(figure: Rc<RefCell<FrameFigure>>) -> FrameModel
-    {
-        FrameModel
-        {
-            figure,
-            transform: Matrix4::new(1.0, 0.0, 0.0, 0.0,
-                                    0.0, 1.0, 0.0, 0.0,
-                                    0.0, 0.0, 1.0, 0.0,
-                                    0.0, 0.0, 0.0, 1.0),
-        }
-    }
-}
-
-impl Model for FrameModel
-{
-    type Output = FrameFigure;
-    fn get_model(&self) -> Rc<RefCell<Self::Output>>
-    {
-        self.figure.clone()
-    }
-
-    fn get_center(&self) -> Point {
-        self.figure.borrow().get_center()
-    }
-
-    fn get_transform(&self) -> Matrix4<f32>
-    {
-        self.transform
-    }
-    fn transform(&mut self, transform: Matrix4<f32>) {
-        self.transform = self.transform * transform;
-    }
-}
-
-impl Visibility for FrameModel
-{
-    fn is_visible(&self) -> bool
-    {
-        true
-    }
-}
-\end{lstlisting}
+%\begin{lstlisting}[style=rust, label=lst:frame_model, caption={Реализация проволочной модели}]
+%...
+%// includes
+%...
+%#[derive(Clone)]
+%pub struct FrameFigure
+%{
+%    points: Vec<Point>,
+%    edges: Vec<Edge>,
+%}
+%
+%#[derive(Clone)]
+%pub struct FrameModel
+%{
+%    figure: Rc<RefCell<FrameFigure>>,
+%    transform: Matrix4<f32>,
+%}
+%
+%impl FrameFigure
+%{
+%    pub fn new() -> FrameFigure
+%    {
+%        FrameFigure
+%        {
+%            points: Vec::new(),
+%            edges: Vec::new(),
+%        }
+%    }
+%
+%    pub fn new_with_points(points: Vec<Point>) -> FrameFigure
+%    {
+%        FrameFigure
+%        {
+%            points,
+%            edges: Vec::new(),
+%        }
+%    }
+%
+%    pub fn new_with_edges(edges: Vec<Edge>) -> FrameFigure
+%    {
+%        FrameFigure
+%        {
+%            points: Vec::new(),
+%            edges,
+%        }
+%    }
+%
+%    pub fn new_with_points_and_edges(points: Vec<Point>, edges: Vec<Edge>) -> FrameFigure
+%    {
+%        FrameFigure
+%        {
+%            points,
+%            edges,
+%        }
+%    }
+%
+%    pub fn get_points(&self) -> &Vec<Point>
+%    {
+%        &self.points
+%    }
+%
+%    pub fn get_edges(&self) -> &Vec<Edge>
+%    {
+%        &self.edges
+%    }
+%
+%    pub fn get_points_mut(&mut self) -> &mut Vec<Point>
+%    {
+%        &mut self.points
+%    }
+%
+%    pub fn get_edges_mut(&mut self) -> &mut Vec<Edge>
+%    {
+%        &mut self.edges
+%    }
+%
+%    pub fn add_point(&mut self, point: Point)
+%    {
+%        self.points.push(point);
+%    }
+%
+%    pub fn add_edge(&mut self, edge: Edge)
+%    {
+%        self.edges.push(edge);
+%    }
+%
+%    pub fn remove_point(&mut self, index: usize)
+%    {
+%        self.points.remove(index);
+%    }
+%
+%    pub fn remove_edge(&mut self, index: usize)
+%    {
+%        self.edges.remove(index);
+%    }
+%
+%    pub fn get_point(&self, index: usize) -> &Point
+%    {
+%        &self.points[index]
+%    }
+%
+%    pub fn get_edge(&self, index: usize) -> &Edge
+%    {
+%        &self.edges[index]
+%    }
+%
+%    pub fn get_point_mut(&mut self, index: usize) -> &mut Point
+%    {
+%        &mut self.points[index]
+%    }
+%
+%    pub fn get_edge_mut(&mut self, index: usize) -> &mut Edge
+%    {
+%        &mut self.edges[index]
+%    }
+%
+%    pub fn get_center(&self) -> Point
+%    {
+%        let mut max = self.points[0];
+%        let mut min = self.points[0];
+%
+%        for point in &self.points
+%        {
+%            max = Point::new(max.get_x().max(point.get_x()), max.get_y().max(point.get_y()), max.get_z().max(point.get_z()));
+%            min = Point::new(min.get_x().min(point.get_x()), min.get_y().min(point.get_y()), min.get_z().min(point.get_z()));
+%        }
+%
+%        (max + min) / Point::new(2.0, 2.0, 2.0)
+%    }
+%}
+%
+%impl FrameModel
+%{
+%    pub(crate) fn new(figure: Rc<RefCell<FrameFigure>>) -> FrameModel
+%    {
+%        FrameModel
+%        {
+%            figure,
+%            transform: Matrix4::new(1.0, 0.0, 0.0, 0.0,
+%                                    0.0, 1.0, 0.0, 0.0,
+%                                    0.0, 0.0, 1.0, 0.0,
+%                                    0.0, 0.0, 0.0, 1.0),
+%        }
+%    }
+%}
+%
+%impl Model for FrameModel
+%{
+%    type Output = FrameFigure;
+%    fn get_model(&self) -> Rc<RefCell<Self::Output>>
+%    {
+%        self.figure.clone()
+%    }
+%
+%    fn get_center(&self) -> Point {
+%        self.figure.borrow().get_center()
+%    }
+%
+%    fn get_transform(&self) -> Matrix4<f32>
+%    {
+%        self.transform
+%    }
+%    fn transform(&mut self, transform: Matrix4<f32>) {
+%        self.transform = self.transform * transform;
+%    }
+%}
+%
+%impl Visibility for FrameModel
+%{
+%    fn is_visible(&self) -> bool
+%    {
+%        true
+%    }
+%}
+%\end{lstlisting}
 \section*{Вывод}
 
-В данном разделе были рассмотрены средства, с помощью которых было реализовано ПО, а также представлены листинги кода с реализацией алгоритмов компьютерной графики.
-
-
+В данном разделе были рассмотрены средства, с помощью которых было реализовано ПО, а также представлены структуры классов и листинги кода с реализацией алгоритмов компьютерной графики.
