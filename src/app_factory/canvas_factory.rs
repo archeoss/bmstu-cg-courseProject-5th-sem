@@ -2,8 +2,8 @@
 
 // use async_trait::async_trait;
 use std::error::Error;
-pub mod canvas_skia;
 pub mod canvas;
+pub mod canvas_skia;
 use canvas::Canvas;
 use canvas_skia::CanvasSkia;
 // pub mod canvas_sdl;  //TODO;
@@ -12,34 +12,32 @@ use crate::errors;
 use errors::not_impl_error::NotImplError;
 
 // #[async_trait]
-trait CanvasFactory {
+trait CanvasFactory
+{
     type Output;
-    /*async*/ fn make(
-        &self,
-        width: u32,
-        height: u32
-    ) -> Self::Output;
+    /*async*/
+    fn make(&self, width: u32, height: u32) -> Self::Output;
 }
 
 pub struct CanvasSkiaFactory;
 // #[async_trait]
-impl CanvasFactory for CanvasSkiaFactory {
+impl CanvasFactory for CanvasSkiaFactory
+{
     type Output = Box<CanvasSkia>;
 
-    /*async*/ fn make(
-        &self,
-        width: u32,
-        height: u32
-    ) -> Self::Output {
-        Box::new(CanvasSkia::new(width, height)/*.await*/)
+    /*async*/
+    fn make(&self, width: u32, height: u32) -> Self::Output
+    {
+        Box::new(CanvasSkia::new(width, height) /*.await*/)
     }
 }
 
-pub /*async*/ fn create_canvas(
+pub fn create_canvas(
     interface: &'static str,
     width: u32,
     height: u32,
-) -> Result<Box<dyn Canvas>, Box<dyn Error>> {
+) -> Result<Box<dyn Canvas>, Box<dyn Error>>
+{
     match interface {
         // TODO
         // "sdl" =>

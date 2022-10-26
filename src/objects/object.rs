@@ -1,7 +1,8 @@
-use cgmath::Matrix4;
 use crate::managers::visitor::Visitor;
+use cgmath::Matrix4;
 
-pub trait Object {
+pub trait Object
+{
     fn add(&mut self, obj: Box<dyn Object>) -> bool;
     fn remove(&mut self, obj: Box<dyn Object>) -> bool;
     fn accept(&mut self, visitor: &mut dyn Visitor);

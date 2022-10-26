@@ -1,20 +1,25 @@
 use std::error::Error;
 use std::fmt::{Debug, Display, Formatter};
 
-pub struct NotImplError {
+pub struct NotImplError
+{
     method: String,
 }
 
-impl NotImplError {
-    pub fn new(method: &str) -> NotImplError {
+impl NotImplError
+{
+    pub fn new(method: &str) -> NotImplError
+    {
         NotImplError {
             method: method.to_string(),
         }
     }
 }
 
-impl Debug for NotImplError {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+impl Debug for NotImplError
+{
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result
+    {
         write!(
             f,
             "Not Implemented: {{ file : {}, line: {}, details: {} }}",
@@ -25,14 +30,18 @@ impl Debug for NotImplError {
     }
 }
 
-impl Display for NotImplError {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+impl Display for NotImplError
+{
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result
+    {
         write!(f, "The method '{}' hasn't been implemented", self.method)
     }
 }
 
-impl Error for NotImplError {
-    fn description(&self) -> &str {
+impl Error for NotImplError
+{
+    fn description(&self) -> &str
+    {
         &self.method
     }
 }

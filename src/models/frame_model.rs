@@ -1,15 +1,15 @@
-pub mod point;
 pub mod edge;
+pub mod point;
 
-use std::cell::RefCell;
-use std::rc::Rc;
-use cgmath::Matrix4;
-pub use point::Point;
-pub use edge::Edge;
+pub use crate::managers::visitor::Visitor;
 pub use crate::models::model::Model;
 pub use crate::objects::object::Object;
-pub use crate::objects::visibility::Visibilty;
-pub use crate::managers::visitor::Visitor;
+pub use crate::objects::visibility::Visibility;
+use cgmath::Matrix4;
+pub use edge::Edge;
+pub use point::Point;
+use std::cell::RefCell;
+use std::rc::Rc;
 
 #[derive(Clone)]
 pub struct FrameFigure
@@ -29,8 +29,7 @@ impl FrameFigure
 {
     pub fn new() -> FrameFigure
     {
-        FrameFigure
-        {
+        FrameFigure {
             points: Vec::new(),
             edges: Vec::new(),
         }
@@ -38,8 +37,7 @@ impl FrameFigure
 
     pub fn new_with_points(points: Vec<Point>) -> FrameFigure
     {
-        FrameFigure
-        {
+        FrameFigure {
             points,
             edges: Vec::new(),
         }
@@ -47,8 +45,7 @@ impl FrameFigure
 
     pub fn new_with_edges(edges: Vec<Edge>) -> FrameFigure
     {
-        FrameFigure
-        {
+        FrameFigure {
             points: Vec::new(),
             edges,
         }
@@ -56,11 +53,7 @@ impl FrameFigure
 
     pub fn new_with_points_and_edges(points: Vec<Point>, edges: Vec<Edge>) -> FrameFigure
     {
-        FrameFigure
-        {
-            points,
-            edges,
-        }
+        FrameFigure { points, edges }
     }
 
     pub fn get_points(&self) -> &Vec<Point>
@@ -128,10 +121,17 @@ impl FrameFigure
         let mut max = self.points[0];
         let mut min = self.points[0];
 
-        for point in &self.points
-        {
-            max = Point::new(max.get_x().max(point.get_x()), max.get_y().max(point.get_y()), max.get_z().max(point.get_z()));
-            min = Point::new(min.get_x().min(point.get_x()), min.get_y().min(point.get_y()), min.get_z().min(point.get_z()));
+        for point in &self.points {
+            max = Point::new(
+                max.get_x().max(point.get_x()),
+                max.get_y().max(point.get_y()),
+                max.get_z().max(point.get_z()),
+            );
+            min = Point::new(
+                min.get_x().min(point.get_x()),
+                min.get_y().min(point.get_y()),
+                min.get_z().min(point.get_z()),
+            );
         }
 
         (max + min) / Point::new(2.0, 2.0, 2.0)
@@ -142,13 +142,11 @@ impl FrameModel
 {
     pub(crate) fn new(figure: Rc<RefCell<FrameFigure>>) -> FrameModel
     {
-        FrameModel
-        {
+        FrameModel {
             figure,
-            transform: Matrix4::new(1.0, 0.0, 0.0, 0.0,
-                                    0.0, 1.0, 0.0, 0.0,
-                                    0.0, 0.0, 1.0, 0.0,
-                                    0.0, 0.0, 0.0, 1.0),
+            transform: Matrix4::new(
+                1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0,
+            ),
         }
     }
 }
@@ -161,7 +159,8 @@ impl Model for FrameModel
         self.figure.clone()
     }
 
-    fn get_center(&self) -> Point {
+    fn get_center(&self) -> Point
+    {
         self.figure.borrow().get_center()
     }
 
@@ -169,12 +168,13 @@ impl Model for FrameModel
     {
         self.transform
     }
-    fn transform(&mut self, transform: Matrix4<f32>) {
+    fn transform(&mut self, transform: Matrix4<f32>)
+    {
         self.transform = self.transform * transform;
     }
 }
 
-impl Visibilty for FrameModel
+impl Visibility for FrameModel
 {
     fn is_visible(&self) -> bool
     {

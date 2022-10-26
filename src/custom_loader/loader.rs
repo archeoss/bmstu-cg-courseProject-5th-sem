@@ -1,5 +1,5 @@
-use std::error::Error;
 use crate::models::frame_model::FrameModel;
+use std::error::Error;
 
 pub mod model_loader;
 
@@ -7,7 +7,6 @@ pub trait Loader<T>
 {
     fn load(&self, filename: &str) -> Result<Box<T>, Box<dyn Error>>;
 }
-
 
 pub trait LoaderFactory<T>
 {

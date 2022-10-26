@@ -1,7 +1,7 @@
+use crate::models::frame_model::Point;
+use cgmath::Matrix4;
 use std::cell::RefCell;
 use std::rc::Rc;
-use cgmath::Matrix4;
-use crate::models::frame_model::Point;
 // use crate::models::frame_model::FrameModel;
 
 pub trait Model

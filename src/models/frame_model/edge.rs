@@ -9,11 +9,7 @@ impl Edge
 {
     pub fn new(from: usize, to: usize) -> Edge
     {
-        Edge
-        {
-            from,
-            to,
-        }
+        Edge { from, to }
     }
 
     pub fn get_from(&self) -> usize

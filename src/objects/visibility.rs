@@ -1,4 +1,4 @@
-pub trait Visibilty
+pub trait Visibility
 {
     fn is_visible(&self) -> bool;
 }

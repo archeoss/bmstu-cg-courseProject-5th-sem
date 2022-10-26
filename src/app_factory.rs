@@ -1,5 +1,5 @@
-use std::error::Error;
 use crate::errors::not_impl_error::NotImplError;
+use std::error::Error;
 // pub mod slint_mod;
 pub mod app;
 pub mod app_slint;
@@ -11,19 +11,23 @@ use crate::app_factory::app_slint::SlintApp;
 // use {MainApp, SlintApp};
 slint::include_modules!();
 
-pub trait AppFactory {
+pub trait AppFactory
+{
     fn make(&self, width: u32, height: u32) -> &mut Box<dyn MainApp>;
 }
 
 pub struct SlintFactory;
-impl AppFactory for SlintFactory {
-    fn make(&self, width: u32, height: u32) -> &mut Box<dyn MainApp> {
+impl AppFactory for SlintFactory
+{
+    fn make(&self, width: u32, height: u32) -> &mut Box<dyn MainApp>
+    {
         Box::leak(Box::from(SlintApp::new(width, height)))
     }
 }
 
 // #[cfg_attr(target_arch = "wasm32", wasm_bindgen)]
-pub fn create_app(interface: &'static str) -> Result<&mut Box<dyn AppFactory>, Box<dyn Error>> {
+pub fn create_app(interface: &'static str) -> Result<&mut Box<dyn AppFactory>, Box<dyn Error>>
+{
     match interface {
         // TODO
         // "winit-pixel" => {
@@ -32,7 +36,7 @@ pub fn create_app(interface: &'static str) -> Result<&mut Box<dyn AppFactory>, B
         //     Ok(app)
         // }
         "slint-skia" => {
-            let factory: &mut Box<dyn AppFactory> = Box::leak(Box::new(Box::new(SlintFactory {} )));
+            let factory: &mut Box<dyn AppFactory> = Box::leak(Box::new(Box::new(SlintFactory {})));
             Ok(factory)
         }
         _ => {
