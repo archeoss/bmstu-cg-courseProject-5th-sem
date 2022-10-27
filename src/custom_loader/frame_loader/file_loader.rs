@@ -1,12 +1,12 @@
 use std::error::Error;
 // use std::error::Error;
 // use crate::models::model::Model;
-use crate::errors::read_error::ReadErr;
 use crate::custom_loader::frame_loader::FrameLoader;
+use crate::errors::read_error::ReadErr;
 use crate::models::frame_model::{Edge, Point};
+use std::env;
 use std::fs::File;
 use std::io::{BufRead, BufReader};
-use std::{env};
 
 pub struct FileFrameLoader
 {
@@ -20,7 +20,8 @@ impl FileFrameLoader
     pub fn new() -> FileFrameLoader
     {
         FileFrameLoader {
-            /*file: None,*/ buffer: None, filename: String::new(),
+            /*file: None,*/ buffer: None,
+            filename: String::new(),
         }
     }
 }

@@ -2,26 +2,35 @@ import { Button, VerticalBox, LineEdit, StandardButton } from "std-widgets.slint
 import { err_dialog } from "./err_dialog.slint";
 //import { MenuBar } from "components.slint";
 export { err_dialog }
+
+export struct ModelItem := {
+    title: string,
+    checked: bool,
+}
+
 export AppWindow := Window {
+    default-font-size: 25px;
     title: "Course Project";
-    property<int> wdth: 1000;
-    property<int> hght: 800;
+    property<int> wdth: 1600;
+    property<int> hght: 1000;
     width: wdth * 1px;
     height: hght * 1px;
 
 
     property <bool> err_visible: false;
     property <string> error_text: "Error";
-    property <int> counter: 0;
     icon: @image-url("./icons/bmstu.png");
     property canvas <=> picture.source;
-    callback request-increase-value();
-    callback request-increase-valuee();
 
     callback move-model();
     callback scale-model();
     callback rotate-model();
     callback draw-frame-model();
+
+    property<string> command: "";
+    callback run-command();
+
+
     err := err_dialog{
         z: 1;
         error_text <=> root.error_text;
@@ -34,9 +43,9 @@ export AppWindow := Window {
         Rectangle
         {
             callback draw-line();
-                background: blue;
+                background: #3333FF;
                 property<int> active: 0;
-                max-width: 250px;
+                max-width: 300px;
                 max-height: 200px;
                 VerticalLayout {
                     padding-left: 0px;
@@ -52,8 +61,8 @@ export AppWindow := Window {
                         padding-bottom: 54px;
 
                         Image {
-                            source: @image-url("icons/bmstu.png");
-                            height: source.height * 1px;
+                            source: @image-url("icons/BMSTU_white.png");
+                            height: source.height * 0.2px;
                         }
                     }
                     //###  In the original, the icon is derived from the name
@@ -83,35 +92,19 @@ export AppWindow := Window {
                                     //x: 20px; y: 20px; height: 150px; width: 150px;
                                     //StandardButton { kind: ok; }
                                     //StandardButton { kind: cancel; }
-                                    draw := Button {
-                                        text: "Draw Frame Model";
-                                        clicked => {
-                                                    root.draw-frame-model();
-                                                    //t.text = "clicked";
-                                                    }
-
-                                    }
-                                    Button {
-                                        text: "Move Model";
-                                        clicked => {
-                                                    root.move-model();
-                                                    //t.text = "clicked2";
-                                                    }
-                                    }
-                                    Button {
-                                        text: "Rotate Model";
-                                        clicked => {
-                                                    root.rotate-model();
-                                                    //t.text = "clicked2";
-                                                    }
-                                    }
-                                    Button {
-                                        text: "Scale Model";
-                                        clicked => {
-                                                    root.scale-model();
-                                                    //t.text = "clicked2";
-                                                    }
-                                    }
+                                    for item in [
+                                            {text: "Draw Frame Model", action: "draw-frame-model"},
+                                            {text: "Move Model", action: "move-model"},
+                                            {text: "Scale Model", action: "scale-model"},
+                                            {text: "Rotate Model", action: "rotate-model"},
+                                        ] : Button {
+                                            text: item.text;
+                                            font-size: 20px;
+                                            clicked => {
+                                                command = item.action;
+                                                root.run-command();
+                                            }
+                                        }
                                 }
                             }
                         ma := TouchArea {
@@ -125,13 +118,13 @@ export AppWindow := Window {
                             padding-right: 30px;
                             i := Image {
                                 source: @image-url("icons/github.png");
-                                width: 14px; // Skin.cpp sets 14 pixels for MenuBarGraphicLabel::Graphic
-                                height: 14px;
+                                width: 18px; // Skin.cpp sets 14 pixels for MenuBarGraphicLabel::Graphic
+                                height: 18px;
                             }
                             t := Text {
                                 text: "Canvas";
                                 color: white;
-                                font-size: 10px;
+                                font-size: 18px;
                             }
                         }
                     }
@@ -143,7 +136,7 @@ export AppWindow := Window {
         {
             //x: 0px;
             //y: 0px;
-            width: wdth * 1px - 250px;
+            width: wdth * 1px - 300px;
             height: hght * 1px;
             border-width: 3px;
             border-color: black;

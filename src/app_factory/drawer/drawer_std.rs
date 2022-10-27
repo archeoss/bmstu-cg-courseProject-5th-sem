@@ -185,14 +185,7 @@ impl Drawer for DrawerSTD
         self.canvas.as_ref().borrow_mut().point(x, y, color);
         // self.canvas_factory.wait_for_esc();
     }
-    fn draw_line(
-        &mut self,
-        x_start: i32,
-        y_start: i32,
-        x_end: i32,
-        y_end: i32,
-        color: [u8; 4],
-    )
+    fn draw_line(&mut self, x_start: i32, y_start: i32, x_end: i32, y_end: i32, color: [u8; 4])
     {
         self.bresenham(x_start, y_start, x_end, y_end, color);
     }

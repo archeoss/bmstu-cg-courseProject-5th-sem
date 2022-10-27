@@ -10,6 +10,6 @@ pub mod objects;
 pub fn main()
 {
     let factory = (app_factory::create_app("slint-skia")).unwrap();
-    let app = factory.make(750, 800);
+    let app = factory.make(1300, 1000);
     app.launch();
 }

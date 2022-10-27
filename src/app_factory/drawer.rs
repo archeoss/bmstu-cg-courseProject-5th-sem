@@ -1,4 +1,4 @@
-use crate::models::frame_model::{FrameFigure};
+use crate::models::frame_model::FrameFigure;
 use std::cell::RefCell;
 use std::error::Error;
 use std::rc::Rc;

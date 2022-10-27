@@ -43,8 +43,7 @@ impl Display for FocusErr
         write!(
             f,
             "Incorrect focus. Number of models: {}, Focus: {}",
-            self.max_focus,
-            self.get_focus
+            self.max_focus, self.get_focus
         )
     }
 }

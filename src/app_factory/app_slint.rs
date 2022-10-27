@@ -3,11 +3,11 @@ use std::cell::RefCell;
 use std::rc::Rc;
 
 // use std::sync::{Arc, Mutex};
-use crate::errors::focus_error::FocusErr;
 use crate::app_factory::app::MainApp;
 use crate::app_factory::canvas_factory::canvas::Canvas;
 use crate::app_factory::canvas_factory::create_canvas;
 use crate::app_factory::drawer::{create_frame_drawer, FrameDrawer};
+use crate::errors::focus_error::FocusErr;
 use crate::managers::load_manager::LoadManager;
 use crate::managers::transform_manager::TransformManager;
 use crate::models::frame_model::FrameFigure;
@@ -67,20 +67,29 @@ impl SlintApp
     {
         let models = self.models.clone();
         let len = models.borrow().len();
-        if focus > len {
-            return Err(Box::new(FocusErr::new("transform_model", len as isize, focus as isize)));
+        if focus > len || focus == 0 {
+            return Err(Box::new(FocusErr::new(
+                "transform_model",
+                len as isize,
+                focus as isize,
+            )));
         }
         focus -= 1;
         let mut transform_manager = self.transform_manager.as_ref().borrow_mut();
         transform_manager.move_model(models.borrow_mut()[focus].clone(), mov.0, mov.1, mov.2);
         transform_manager.rotate_model(models.borrow_mut()[focus].clone(), rot.0, rot.1, rot.2);
-        transform_manager.scale_model(models.borrow_mut()[focus].clone(), scale.0, scale.1, scale.2);
+        transform_manager.scale_model(
+            models.borrow_mut()[focus].clone(),
+            scale.0,
+            scale.1,
+            scale.2,
+        );
         Ok(())
     }
 
     fn update(&mut self) -> SharedPixelBuffer<Rgba8Pixel>
     {
-        let mut pixel_buffer = SharedPixelBuffer::<Rgba8Pixel>::new(750, 800);
+        let mut pixel_buffer = SharedPixelBuffer::<Rgba8Pixel>::new(self.width, self.height);
 
         let width = pixel_buffer.width();
         let height = pixel_buffer.height();
@@ -137,11 +146,7 @@ impl MainApp for SlintApp
     {
         let ui = AppWindow::new();
         let ui_handle = ui.as_weak();
-        ui.on_request_increase_valuee(move || {
-            let ui = ui_handle.unwrap();
-            ui.set_counter(ui.get_counter() + 1);
-        });
-        let mut pixel_buffer = SharedPixelBuffer::<Rgba8Pixel>::new(750, 800);
+        let mut pixel_buffer = SharedPixelBuffer::<Rgba8Pixel>::new(self.width, self.height);
         let width = pixel_buffer.width();
         let height = pixel_buffer.height();
         let mut pixmap =
@@ -150,27 +155,52 @@ impl MainApp for SlintApp
         ui.set_canvas(Image::from_rgba8_premultiplied(pixel_buffer));
 
         let ui_handle = ui.as_weak();
-        let mut s2 = Rc::new(RefCell::new(self));
-        let mut s3 = s2.clone();
-        let mut s4 = s2.clone();
-        let mut s5 = s2.clone();
-        ui.on_draw_frame_model(move || {
-            let mut error_str;
-            let ui = ui_handle.unwrap();
-            let path = std::env::current_dir().unwrap();
-            let task = rfd::FileDialog::new().set_directory(&path).pick_file();
+        let mut s = Rc::new(RefCell::new(self));
 
-            match task {
-                Some(path) => {
-                    let model = s2
-                        .clone()
-                        .borrow_mut()
-                        .load_model(path.to_str().unwrap(), "frame");
-                    match model {
+        let ui_handle = ui.as_weak();
+        ui.on_run_command(move || {
+            let ui = ui_handle.unwrap();
+            let command = ui.get_command();
+            let mut error_str;
+            match command.as_str() {
+                "draw-frame-model" => {
+                    let path = std::env::current_dir().unwrap();
+                    let task = rfd::FileDialog::new().set_directory(&path).pick_file();
+                    match task {
+                        Some(path) => {
+                            let model = s
+                                .clone()
+                                .borrow_mut()
+                                .load_model(path.to_str().unwrap(), "frame");
+                            match model {
+                                Ok(_) => {
+                                    error_str = SharedString::from("Model loaded");
+                                    let image = Image::from_rgba8_premultiplied(
+                                        s.clone().borrow_mut().update(),
+                                    );
+                                    ui.set_canvas(image);
+                                }
+                                Err(e) => {
+                                    error_str = SharedString::from(format!("Error: {}", e));
+                                }
+                            }
+                        }
+                        None => {
+                            error_str = SharedString::from("Incorrect path");
+                        }
+                    }
+                }
+                "move-model" => {
+                    match s.clone().borrow_mut().transform_model(
+                        0,
+                        (100.0, 0.0, 0.0),
+                        (0.0, 0.0, 0.0),
+                        (1.0, 1.0, 1.0),
+                    ) {
                         Ok(_) => {
-                            error_str = SharedString::from("Model loaded");
+                            error_str = SharedString::from("Model moved");
                             let image =
-                                Image::from_rgba8_premultiplied(s2.clone().borrow_mut().update());
+                                Image::from_rgba8_premultiplied(s.clone().borrow_mut().update());
                             ui.set_canvas(image);
                         }
                         Err(e) => {
@@ -178,43 +208,50 @@ impl MainApp for SlintApp
                         }
                     }
                 }
-                None => {
-                    error_str = SharedString::from("Incorrect path");
+                "rotate-model" => {
+                    match s.clone().borrow_mut().transform_model(
+                        0,
+                        (0.0, 0.0, 0.0),
+                        (30.0, 30.0, 30.0),
+                        (1.0, 1.0, 1.0),
+                    ) {
+                        Ok(_) => {
+                            error_str = SharedString::from("Model rotated");
+                            let image =
+                                Image::from_rgba8_premultiplied(s.clone().borrow_mut().update());
+                            ui.set_canvas(image);
+                        }
+                        Err(e) => {
+                            error_str = SharedString::from(format!("Error: {}", e));
+                        }
+                    }
+                }
+                "scale-model" => {
+                    match s.clone().borrow_mut().transform_model(
+                        0,
+                        (0.0, 0.0, 0.0),
+                        (0.0, 0.0, 0.0),
+                        (2.0, 2.0, 2.0),
+                    ) {
+                        Ok(_) => {
+                            error_str = SharedString::from("Model scaled");
+                            let image =
+                                Image::from_rgba8_premultiplied(s.clone().borrow_mut().update());
+                            ui.set_canvas(image);
+                        }
+                        Err(e) => {
+                            error_str = SharedString::from(format!("Error: {}", e));
+                        }
+                    }
+                }
+                _ => {
+                    error_str = SharedString::from("Unknown command");
                 }
             }
             ui.set_error_text(error_str);
             ui.set_err_visible(true);
         });
-        let ui_handle2 = ui.as_weak();
-        ui.on_move_model(move || {
-            let ui = ui_handle2.unwrap();
-            s3.clone()
-                .borrow_mut()
-                .transform_model(0, (100.0, 0.0, 0.0), (0.0, 0.0, 0.0), (1.0, 1.0, 1.0))
-                .unwrap();
-            let image = Image::from_rgba8_premultiplied(s3.clone().borrow_mut().update());
-            ui.set_canvas(image);
-        });
-        let ui_handle3 = ui.as_weak();
-        ui.on_rotate_model(move || {
-            let ui = ui_handle3.unwrap();
-            s4.clone()
-                .borrow_mut()
-                .transform_model(0, (0.0, 0.0, 0.0), (30.0, 30.0, 30.0), (1.0, 1.0, 1.0))
-                .unwrap();
-            let image = Image::from_rgba8_premultiplied(s4.clone().borrow_mut().update());
-            ui.set_canvas(image);
-        });
-        let ui_handle4 = ui.as_weak();
-        ui.on_scale_model(move || {
-            let ui = ui_handle4.unwrap();
-            s5.clone()
-                .borrow_mut()
-                .transform_model(0, (0.0, 0.0, 0.0), (0.0, 0.0, 0.0), (2.0, 2.0, 2.0))
-                .unwrap();
-            let image = Image::from_rgba8_premultiplied(s5.clone().borrow_mut().update());
-            ui.set_canvas(image);
-        });
+
         ui.run();
     }
 }
