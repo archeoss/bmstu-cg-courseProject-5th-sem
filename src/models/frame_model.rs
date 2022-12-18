@@ -27,41 +27,41 @@ pub struct FrameModel
 
 impl FrameFigure
 {
-    pub fn new() -> FrameFigure
+    #[must_use] pub fn new() -> Self
     {
-        FrameFigure {
+        Self {
             points: Vec::new(),
             edges: Vec::new(),
         }
     }
 
-    pub fn new_with_points(points: Vec<Point>) -> FrameFigure
+    #[must_use] pub fn new_with_points(points: Vec<Point>) -> Self
     {
-        FrameFigure {
+        Self {
             points,
             edges: Vec::new(),
         }
     }
 
-    pub fn new_with_edges(edges: Vec<Edge>) -> FrameFigure
+    #[must_use] pub fn new_with_edges(edges: Vec<Edge>) -> Self
     {
-        FrameFigure {
+        Self {
             points: Vec::new(),
             edges,
         }
     }
 
-    pub fn new_with_points_and_edges(points: Vec<Point>, edges: Vec<Edge>) -> FrameFigure
+    #[must_use] pub fn new_with_points_and_edges(points: Vec<Point>, edges: Vec<Edge>) -> Self
     {
-        FrameFigure { points, edges }
+        Self { points, edges }
     }
 
-    pub fn get_points(&self) -> &Vec<Point>
+    #[must_use] pub fn get_points(&self) -> &Vec<Point>
     {
         &self.points
     }
 
-    pub fn get_edges(&self) -> &Vec<Edge>
+    #[must_use] pub fn get_edges(&self) -> &Vec<Edge>
     {
         &self.edges
     }
@@ -96,12 +96,12 @@ impl FrameFigure
         self.edges.remove(index);
     }
 
-    pub fn get_point(&self, index: usize) -> &Point
+    #[must_use] pub fn get_point(&self, index: usize) -> &Point
     {
         &self.points[index]
     }
 
-    pub fn get_edge(&self, index: usize) -> &Edge
+    #[must_use] pub fn get_edge(&self, index: usize) -> &Edge
     {
         &self.edges[index]
     }
@@ -116,7 +116,7 @@ impl FrameFigure
         &mut self.edges[index]
     }
 
-    pub fn get_center(&self) -> Point
+    #[must_use] pub fn get_center(&self) -> Point
     {
         let mut max = self.points[0];
         let mut min = self.points[0];
@@ -140,9 +140,9 @@ impl FrameFigure
 
 impl FrameModel
 {
-    pub(crate) fn new(figure: Rc<RefCell<FrameFigure>>) -> FrameModel
+    pub(crate) fn new(figure: Rc<RefCell<FrameFigure>>) -> Self
     {
-        FrameModel {
+        Self {
             figure,
             transform: Matrix4::new(
                 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0,
@@ -184,11 +184,11 @@ impl Visibility for FrameModel
 
 impl Object for FrameModel
 {
-    fn add(&mut self, obj: Box<dyn Object>) -> bool
+    fn add(&mut self, _obj: Box<dyn Object>) -> bool
     {
         false
     }
-    fn remove(&mut self, obj: Box<dyn Object>) -> bool
+    fn remove(&mut self, _obj: Box<dyn Object>) -> bool
     {
         false
     }

@@ -11,27 +11,27 @@ pub struct Camera
 
 impl Camera
 {
-    pub fn new(projection_point: Point) -> Camera
+    #[must_use] pub fn new(projection_point: Point) -> Self
     {
-        Camera { projection_point }
+        Self { projection_point }
     }
 }
 
 impl Object for Camera
 {
-    fn add(&mut self, obj: Box<dyn Object>) -> bool
+    fn add(&mut self, _obj: Box<dyn Object>) -> bool
     {
         false
     }
 
-    fn remove(&mut self, obj: Box<dyn Object>) -> bool
+    fn remove(&mut self, _obj: Box<dyn Object>) -> bool
     {
         false
     }
 
     fn accept(&mut self, visitor: &mut dyn Visitor)
     {
-        visitor.visit_camera(&self)
+        visitor.visit_camera(self)
     }
 
     fn transform(&mut self, transform: Matrix4<f32>)

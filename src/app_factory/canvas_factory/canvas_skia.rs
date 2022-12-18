@@ -19,10 +19,10 @@ impl Canvas for CanvasSkia
     where
         Self: Sized,
     {
-        CanvasSkia {
+        Self {
             width,
             height,
-            frame: vec![0 as u8; (width * height * 4) as usize],
+            frame: vec![0_u8; (width * height * 4) as usize],
         }
     }
     fn point(&mut self, x: i32, y: i32, color: [u8; 4])
@@ -55,11 +55,11 @@ impl Canvas for CanvasSkia
             self.width = width;
             self.height = height;
             self.frame = new_frame.to_vec();
-            if (width * height) as u32 != new_frame.len() as u32 {
+            if (width * height) != new_frame.len() as u32 {
                 Err(Box::new(WrongSizeErr::new(
                     "resize_surface",
                     (width * height) as usize,
-                    new_frame.len() as usize,
+                    new_frame.len(),
                 )))
             } else {
                 Ok(())

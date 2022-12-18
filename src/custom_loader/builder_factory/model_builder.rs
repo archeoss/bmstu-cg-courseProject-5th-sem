@@ -13,9 +13,9 @@ pub struct FrameModelBuilder
 
 impl FrameModelBuilder
 {
-    pub fn new() -> Self
+    #[must_use] pub fn new() -> Self
     {
-        FrameModelBuilder {
+        Self {
             points: None,
             edges: None,
             model: None,

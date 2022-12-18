@@ -11,22 +11,22 @@ pub struct Point
 
 impl Point
 {
-    pub fn new(x: f32, y: f32, z: f32) -> Point
+    #[must_use] pub fn new(x: f32, y: f32, z: f32) -> Self
     {
-        Point { x, y, z }
+        Self { x, y, z }
     }
 
-    pub fn get_x(&self) -> f32
+    #[must_use] pub fn get_x(&self) -> f32
     {
         self.x
     }
 
-    pub fn get_y(&self) -> f32
+    #[must_use] pub fn get_y(&self) -> f32
     {
         self.y
     }
 
-    pub fn get_z(&self) -> f32
+    #[must_use] pub fn get_z(&self) -> f32
     {
         self.z
     }
@@ -46,7 +46,7 @@ impl Point
         self.z = z;
     }
 
-    pub fn get_position(&self) -> (f32, f32, f32)
+    #[must_use] pub fn get_position(&self) -> (f32, f32, f32)
     {
         (self.x, self.y, self.z)
     }
@@ -58,12 +58,12 @@ impl Point
         self.z = z;
     }
 
-    pub(crate) fn transform(&self, transform: &Matrix4<f32>) -> Point
+    pub(crate) fn transform(&self, transform: &Matrix4<f32>) -> Self
     {
-        let mut point = Point3::<f32>::new(self.x as f32, self.y as f32, self.z as f32);
+        let mut point = Point3::<f32>::new(self.x, self.y, self.z);
         point = transform.transform_point(point);
 
-        Point::new(point.x, point.y, point.z)
+        Self::new(point.x, point.y, point.z)
     }
 
     fn move_coord(&mut self, x: f32, y: f32, z: f32)
@@ -80,7 +80,7 @@ impl Point
         self.z *= z;
     }
 
-    fn rotate_coord(&mut self, x: f32, y: f32, z: f32)
+    fn rotate_coord(&mut self, _x: f32, _y: f32, _z: f32)
     {
         // let x_rad = x.to_radians();
         // let y_rad = y.to_radians();
@@ -113,11 +113,11 @@ impl Point
 
 impl ops::Add for Point
 {
-    type Output = Point;
+    type Output = Self;
 
-    fn add(self, other: Point) -> Point
+    fn add(self, other: Self) -> Self
     {
-        Point {
+        Self {
             x: self.x + other.x,
             y: self.y + other.y,
             z: self.z + other.z,
@@ -127,11 +127,11 @@ impl ops::Add for Point
 
 impl ops::Sub for Point
 {
-    type Output = Point;
+    type Output = Self;
 
-    fn sub(self, other: Point) -> Point
+    fn sub(self, other: Self) -> Self
     {
-        Point {
+        Self {
             x: self.x - other.x,
             y: self.y - other.y,
             z: self.z - other.z,
@@ -142,11 +142,11 @@ impl ops::Sub for Point
 // impl ops::Mul for Matrix4<>
 impl ops::Mul for Point
 {
-    type Output = Point;
+    type Output = Self;
 
-    fn mul(self, other: Point) -> Point
+    fn mul(self, other: Self) -> Self
     {
-        Point {
+        Self {
             x: self.x * other.x,
             y: self.y * other.y,
             z: self.z * other.z,
@@ -156,11 +156,11 @@ impl ops::Mul for Point
 
 impl ops::Div for Point
 {
-    type Output = Point;
+    type Output = Self;
 
-    fn div(self, other: Point) -> Point
+    fn div(self, other: Self) -> Self
     {
-        Point {
+        Self {
             x: self.x / other.x,
             y: self.y / other.y,
             z: self.z / other.z,
@@ -170,7 +170,7 @@ impl ops::Div for Point
 
 impl ops::AddAssign for Point
 {
-    fn add_assign(&mut self, other: Point)
+    fn add_assign(&mut self, other: Self)
     {
         self.x += other.x;
         self.y += other.y;
@@ -180,7 +180,7 @@ impl ops::AddAssign for Point
 
 impl ops::SubAssign for Point
 {
-    fn sub_assign(&mut self, other: Point)
+    fn sub_assign(&mut self, other: Self)
     {
         self.x -= other.x;
         self.y -= other.y;
@@ -190,7 +190,7 @@ impl ops::SubAssign for Point
 
 impl ops::MulAssign for Point
 {
-    fn mul_assign(&mut self, other: Point)
+    fn mul_assign(&mut self, other: Self)
     {
         self.x *= other.x;
         self.y *= other.y;
@@ -200,7 +200,7 @@ impl ops::MulAssign for Point
 
 impl ops::DivAssign for Point
 {
-    fn div_assign(&mut self, other: Point)
+    fn div_assign(&mut self, other: Self)
     {
         self.x /= other.x;
         self.y /= other.y;

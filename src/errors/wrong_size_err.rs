@@ -10,9 +10,9 @@ pub struct WrongSizeErr
 
 impl WrongSizeErr
 {
-    pub fn new(method: &str, frame_size: usize, buffer_size: usize) -> WrongSizeErr
+    #[must_use] pub fn new(method: &str, frame_size: usize, buffer_size: usize) -> Self
     {
-        WrongSizeErr {
+        Self {
             method: method.to_string(),
             frame_size,
             buffer_size,
@@ -26,8 +26,7 @@ impl Debug for WrongSizeErr
     {
         write!(
             f,
-            "Wrong Size: {{ file : {}, line: {}, method: {}, buffer size: {}, frame size: {} }}",
-            file!(),
+            "Wrong Size: {{ file : ile!(, line: {}, method: {}, buffer size: {}, frame size: {} }}",
             line!(),
             self.method,
             self.buffer_size,

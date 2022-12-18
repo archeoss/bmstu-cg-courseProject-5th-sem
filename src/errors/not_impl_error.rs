@@ -8,9 +8,9 @@ pub struct NotImplError
 
 impl NotImplError
 {
-    pub fn new(method: &str) -> NotImplError
+    #[must_use] pub fn new(method: &str) -> Self
     {
-        NotImplError {
+        Self {
             method: method.to_string(),
         }
     }
@@ -22,8 +22,7 @@ impl Debug for NotImplError
     {
         write!(
             f,
-            "Not Implemented: {{ file : {}, line: {}, details: {} }}",
-            file!(),
+            "Not Implemented: {{ file : ile!(, line: {}, details: {} }}",
             line!(),
             self.method
         )

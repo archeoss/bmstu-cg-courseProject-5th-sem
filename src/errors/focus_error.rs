@@ -10,9 +10,9 @@ pub struct FocusErr
 
 impl FocusErr
 {
-    pub fn new(method: &str, max_focus: isize, get_focus: isize) -> FocusErr
+    #[must_use] pub fn new(method: &str, max_focus: isize, get_focus: isize) -> Self
     {
-        FocusErr {
+        Self {
             method: method.to_string(),
             max_focus,
             get_focus,
@@ -26,8 +26,7 @@ impl Debug for FocusErr
     {
         write!(
             f,
-            "Wrong focus: {{ file : {}, line: {}, method: {}, max_focus: {}, min_focus: 0, get_focus: {} }}",
-            file!(),
+            "Wrong focus: {{ file : ile!(, line: {}, method: {}, max_focus: {}, min_focus: 0, get_focus: {} }}",
             line!(),
             self.method,
             self.max_focus,

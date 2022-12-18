@@ -9,9 +9,9 @@ pub struct TransformManager;
 
 impl TransformManager
 {
-    pub fn new() -> Self
+    #[must_use] pub fn new() -> Self
     {
-        TransformManager
+        Self
     }
 
     pub fn move_model(

@@ -6,9 +6,9 @@ pub struct LoadManager;
 impl LoadManager
 {
     // ...
-    pub fn new() -> Self
+    #[must_use] pub fn new() -> Self
     {
-        LoadManager
+        Self
     }
 
     pub fn load(

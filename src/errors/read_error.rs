@@ -9,9 +9,9 @@ pub struct ReadErr
 
 impl ReadErr
 {
-    pub fn new(method: &str, filename: String) -> ReadErr
+    #[must_use] pub fn new(method: &str, filename: String) -> Self
     {
-        ReadErr {
+        Self {
             method: method.to_string(),
             filename,
         }
@@ -24,8 +24,7 @@ impl Debug for ReadErr
     {
         write!(
             f,
-            "Incorrect: {{ file : {}, line: {}, method: {}, filename: {} }}",
-            file!(),
+            "Incorrect: {{ file : ile!(, line: {}, method: {}, filename: {} }}",
             line!(),
             self.method,
             self.filename

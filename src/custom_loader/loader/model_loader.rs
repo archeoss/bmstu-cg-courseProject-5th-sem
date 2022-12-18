@@ -10,9 +10,9 @@ pub struct ModelLoader;
 
 impl ModelLoader
 {
-    pub fn new() -> Self
+    #[must_use] pub fn new() -> Self
     {
-        ModelLoader
+        Self
     }
 }
 

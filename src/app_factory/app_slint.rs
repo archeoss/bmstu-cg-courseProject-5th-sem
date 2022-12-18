@@ -129,7 +129,7 @@ impl MainApp for SlintApp
             create_frame_drawer("std", canvas.clone()).unwrap(),
         ));
 
-        Box::new(SlintApp {
+        Box::new(Self {
             width,
             height,
             // canvas: None,
@@ -145,7 +145,7 @@ impl MainApp for SlintApp
     fn launch(&'static mut self)
     {
         let ui = AppWindow::new();
-        let ui_handle = ui.as_weak();
+        let _ui_handle = ui.as_weak();
         let mut pixel_buffer = SharedPixelBuffer::<Rgba8Pixel>::new(self.width, self.height);
         let width = pixel_buffer.width();
         let height = pixel_buffer.height();
@@ -154,18 +154,18 @@ impl MainApp for SlintApp
         pixmap.fill(tiny_skia::Color::BLACK);
         ui.set_canvas(Image::from_rgba8_premultiplied(pixel_buffer));
 
-        let ui_handle = ui.as_weak();
-        let mut s = Rc::new(RefCell::new(self));
+        let _ui_handle = ui.as_weak();
+        let s = Rc::new(RefCell::new(self));
 
         let ui_handle = ui.as_weak();
         ui.on_run_command(move || {
             let ui = ui_handle.unwrap();
             let command = ui.get_command();
-            let mut error_str;
+            let error_str;
             match command.as_str() {
                 "draw-frame-model" => {
                     let path = std::env::current_dir().unwrap();
-                    let task = rfd::FileDialog::new().set_directory(&path).pick_file();
+                    let task = rfd::FileDialog::new().set_directory(path).pick_file();
                     match task {
                         Some(path) => {
                             let model = s
@@ -181,7 +181,7 @@ impl MainApp for SlintApp
                                     ui.set_canvas(image);
                                 }
                                 Err(e) => {
-                                    error_str = SharedString::from(format!("Error: {}", e));
+                                    error_str = SharedString::from(format!("Error: {e}"));
                                 }
                             }
                         }
@@ -204,7 +204,7 @@ impl MainApp for SlintApp
                             ui.set_canvas(image);
                         }
                         Err(e) => {
-                            error_str = SharedString::from(format!("Error: {}", e));
+                            error_str = SharedString::from(format!("Error: {e}"));
                         }
                     }
                 }
@@ -222,7 +222,7 @@ impl MainApp for SlintApp
                             ui.set_canvas(image);
                         }
                         Err(e) => {
-                            error_str = SharedString::from(format!("Error: {}", e));
+                            error_str = SharedString::from(format!("Error: {e}"));
                         }
                     }
                 }
@@ -240,7 +240,7 @@ impl MainApp for SlintApp
                             ui.set_canvas(image);
                         }
                         Err(e) => {
-                            error_str = SharedString::from(format!("Error: {}", e));
+                            error_str = SharedString::from(format!("Error: {e}"));
                         }
                     }
                 }

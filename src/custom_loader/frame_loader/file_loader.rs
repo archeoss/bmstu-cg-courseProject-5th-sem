@@ -17,9 +17,9 @@ pub struct FileFrameLoader
 
 impl FileFrameLoader
 {
-    pub fn new() -> FileFrameLoader
+    #[must_use] pub fn new() -> Self
     {
-        FileFrameLoader {
+        Self {
             /*file: None,*/ buffer: None,
             filename: String::new(),
         }
@@ -65,9 +65,9 @@ impl FrameLoader for FileFrameLoader
         let mut points = Vec::<Point>::with_capacity(n as usize);
 
         for _ in 0..n {
-            line = "".to_string();
+            line = String::new();
             reader.read_line(&mut line)?;
-            let mut parts = line.trim().split_whitespace().map(|x| x.parse::<f32>());
+            let mut parts = line.split_whitespace().map(str::parse);
             match (parts.next(), parts.next(), parts.next()) {
                 (Some(Ok(x)), Some(Ok(y)), Some(Ok(z))) => {
                     points.push(Point::new(x, y, z));
@@ -91,9 +91,9 @@ impl FrameLoader for FileFrameLoader
         let mut edges = Vec::<Edge>::with_capacity(n as usize);
 
         for _ in 0..n {
-            line = "".to_string();
+            line = String::new();
             reader.read_line(&mut line)?;
-            let mut parts = line.trim().split_whitespace().map(|x| x.parse::<usize>());
+            let mut parts = line.split_whitespace().map(str::parse);
 
             match (parts.next(), parts.next()) {
                 (Some(Ok(p1)), Some(Ok(p2))) => {

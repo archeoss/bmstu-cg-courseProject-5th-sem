@@ -15,9 +15,9 @@ pub struct DrawerSTD
 
 impl DrawerSTD
 {
-    pub fn new(canvas: Rc<RefCell<Box<dyn Canvas>>>) -> DrawerSTD
+    pub fn new(canvas: Rc<RefCell<Box<dyn Canvas>>>) -> Self
     {
-        DrawerSTD { canvas }
+        Self { canvas }
     }
 
     fn bresenham(
@@ -53,7 +53,7 @@ impl DrawerSTD
         } else {
             ystep = -1;
         }
-        for x in x_start..(x_end + 1) {
+        for x in x_start..=x_end {
             if is_steep {
                 points.push((y, x));
             } else {
@@ -189,12 +189,12 @@ impl Drawer for DrawerSTD
     {
         self.bresenham(x_start, y_start, x_end, y_end, color);
     }
-    fn draw_line_aa(&mut self, x_start: i32, y_start: i32, x_end: i32, y_end: i32, color: [u8; 4])
+    fn draw_line_aa(&mut self, _x_start: i32, _y_start: i32, _x_end: i32, _y_end: i32, _color: [u8; 4])
     {
         // self.wu(x_start, y_start, x_end, y_end, color);
     }
 
-    fn draw_ellipse(&mut self, x: i32, y: i32, width: i32, height: i32, color: [u8; 4])
+    fn draw_ellipse(&mut self, _x: i32, _y: i32, _width: i32, _height: i32, _color: [u8; 4])
     {
         // self.canvas_factory.ellipse(x, y, width, height, color);
         // self.canvas_factory.wait_for_esc();
@@ -231,8 +231,8 @@ impl FrameDrawer for DrawerSTD
         let center = Point::new(width as f32 / 2.0, height as f32 / 2.0, 0.0);
         for i in 0..edges.len() {
             let edge = edges[i];
-            let start = points[edge.from as usize];
-            let end = points[edge.to as usize];
+            let start = points[edge.from];
+            let end = points[edge.to];
             let start = center - start.transform(&tr);
             let end = center - end.transform(&tr);
             self.draw_line(
