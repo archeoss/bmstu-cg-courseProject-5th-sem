@@ -8,19 +8,19 @@ pub struct Edge
 impl Edge
 {
     #[must_use]
-    pub fn new(from: usize, to: usize) -> Self
+    pub const fn new(from: usize, to: usize) -> Self
     {
         Self { from, to }
     }
 
     #[must_use]
-    pub fn get_from(&self) -> usize
+    pub const fn get_from(&self) -> usize
     {
         self.from
     }
 
     #[must_use]
-    pub fn get_to(&self) -> usize
+    pub const fn get_to(&self) -> usize
     {
         self.to
     }
@@ -36,7 +36,7 @@ impl Edge
     }
 
     #[must_use]
-    pub fn get_from_to(&self) -> (usize, usize)
+    pub const fn get_from_to(&self) -> (usize, usize)
     {
         (self.from, self.to)
     }

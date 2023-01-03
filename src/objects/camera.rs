@@ -18,7 +18,7 @@ pub struct Camera
 impl Camera
 {
     #[must_use]
-    pub fn new(pos: Point<f64>) -> Self
+    pub const fn new(pos: Point<f64>) -> Self
     {
         Self {
             pos,
@@ -56,7 +56,7 @@ impl Object for Camera
 
     fn accept(&mut self, visitor: &mut dyn Visitor)
     {
-        visitor.visit_camera(self)
+        visitor.visit_camera(self);
     }
 
     fn transform(&mut self, _transform: Matrix4<f64>)

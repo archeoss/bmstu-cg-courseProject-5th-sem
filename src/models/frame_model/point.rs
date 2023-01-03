@@ -12,25 +12,25 @@ pub struct Point<T: Float>
 impl<T: BaseFloat + Float + std::ops::MulAssign + std::ops::AddAssign> Point<T>
 {
     #[must_use]
-    pub fn new(x: T, y: T, z: T) -> Self
+    pub const fn new(x: T, y: T, z: T) -> Self
     {
         Self { x, y, z }
     }
 
     #[must_use]
-    pub fn get_x(&self) -> T
+    pub const fn get_x(&self) -> T
     {
         self.x
     }
 
     #[must_use]
-    pub fn get_y(&self) -> T
+    pub const fn get_y(&self) -> T
     {
         self.y
     }
 
     #[must_use]
-    pub fn get_z(&self) -> T
+    pub const fn get_z(&self) -> T
     {
         self.z
     }
@@ -51,7 +51,7 @@ impl<T: BaseFloat + Float + std::ops::MulAssign + std::ops::AddAssign> Point<T>
     }
 
     #[must_use]
-    pub fn get_position(&self) -> (T, T, T)
+    pub const fn get_position(&self) -> (T, T, T)
     {
         (self.x, self.y, self.z)
     }

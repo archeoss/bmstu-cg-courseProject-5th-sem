@@ -328,7 +328,7 @@ impl MainApp
             .unwrap(),
         ));
         let drawer = Rc::new(RefCell::new(
-            create_frame_drawer("std", canvas.clone()).unwrap(),
+            create_frame_drawer("std", canvas).unwrap(),
         ));
         //
         // let mut pixmap =

@@ -26,10 +26,18 @@ pub struct FrameModel
     transform: Matrix4<f64>,
 }
 
+impl Default for FrameFigure
+{
+    fn default() -> Self
+    {
+        Self::new()
+    }
+}
+
 impl FrameFigure
 {
     #[must_use]
-    pub fn new() -> Self
+    pub const fn new() -> Self
     {
         Self {
             points: Vec::new(),
@@ -62,19 +70,19 @@ impl FrameFigure
     }
 
     #[must_use]
-    pub fn get_points(&self) -> &Vec<Point<f64>>
+    pub const fn get_points(&self) -> &Vec<Point<f64>>
     {
         &self.points
     }
 
     #[must_use]
-    pub fn get_edges(&self) -> &Vec<Edge>
+    pub const fn get_edges(&self) -> &Vec<Edge>
     {
         &self.edges
     }
 
     #[must_use]
-    pub fn get_name(&self) -> &str
+    pub const fn get_name(&self) -> &str
     {
         "FrameFigure"
     }
