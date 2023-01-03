@@ -10,7 +10,8 @@ pub struct FocusErr
 
 impl FocusErr
 {
-    #[must_use] pub fn new(method: &str, max_focus: isize, get_focus: isize) -> Self
+    #[must_use]
+    pub fn new(method: &str, max_focus: isize, get_focus: isize) -> Self
     {
         Self {
             method: method.to_string(),

@@ -20,7 +20,10 @@ pub(crate) fn seconds_since_midnight() -> f64
 {
     use chrono::Timelike;
     let time = chrono::Local::now().time();
-    1e-9f64.mul_add(f64::from(time.nanosecond()), f64::from(time.num_seconds_from_midnight()))
+    1e-9f64.mul_add(
+        f64::from(time.nanosecond()),
+        f64::from(time.num_seconds_from_midnight()),
+    )
 }
 
 // ----------------------------------------------------------------------------

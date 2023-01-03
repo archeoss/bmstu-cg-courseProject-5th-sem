@@ -9,7 +9,8 @@ pub struct ReadErr
 
 impl ReadErr
 {
-    #[must_use] pub fn new(method: &str, filename: String) -> Self
+    #[must_use]
+    pub fn new(method: &str, filename: String) -> Self
     {
         Self {
             method: method.to_string(),

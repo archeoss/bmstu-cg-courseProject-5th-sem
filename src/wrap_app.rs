@@ -1,5 +1,3 @@
-
-
 #[cfg(target_arch = "wasm32")]
 use core::any::Any;
 
@@ -46,7 +44,8 @@ pub struct WrapApp
 
 impl WrapApp
 {
-    #[must_use] pub fn new(_cc: &eframe::CreationContext<'_>) -> Self
+    #[must_use]
+    pub fn new(_cc: &eframe::CreationContext<'_>) -> Self
     {
         #[allow(unused_mut)]
         let mut slf = Self {

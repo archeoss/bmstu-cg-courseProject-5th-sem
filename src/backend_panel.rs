@@ -2,20 +2,24 @@ use egui::Widget;
 
 /// How often we repaint the demo app by default
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
-enum RunMode {
+enum RunMode
+{
     Reactive,
     Continuous,
 }
 
-impl Default for RunMode {
-    fn default() -> Self {
+impl Default for RunMode
+{
+    fn default() -> Self
+    {
         Self::Reactive
     }
 }
 
 // #[cfg_attr(feature = "serde", derive(serde::Deserialize, serde::Serialize))]
 // #[cfg_attr(feature = "serde", serde(default))]
-pub struct BackendPanel {
+pub struct BackendPanel
+{
     pub open: bool,
 
     // #[cfg_attr(feature = "serde", serde(skip))]
@@ -35,8 +39,10 @@ pub struct BackendPanel {
     egui_windows: EguiWindows,
 }
 
-impl Default for BackendPanel {
-    fn default() -> Self {
+impl Default for BackendPanel
+{
+    fn default() -> Self
+    {
         Self {
             open: false,
             run_mode: Default::default(),
@@ -48,8 +54,10 @@ impl Default for BackendPanel {
     }
 }
 
-impl BackendPanel {
-    pub fn update(&mut self, ctx: &egui::Context, frame: &mut eframe::Frame) {
+impl BackendPanel
+{
+    pub fn update(&mut self, ctx: &egui::Context, frame: &mut eframe::Frame)
+    {
         self.frame_history
             .on_new_frame(ctx.input().time, frame.info().cpu_usage);
 
@@ -67,11 +75,13 @@ impl BackendPanel {
         }
     }
 
-    pub fn end_of_frame(&mut self, ctx: &egui::Context) {
+    pub fn end_of_frame(&mut self, ctx: &egui::Context)
+    {
         self.egui_windows.windows(ctx);
     }
 
-    pub fn ui(&mut self, ui: &mut egui::Ui, frame: &mut eframe::Frame) {
+    pub fn ui(&mut self, ui: &mut egui::Ui, frame: &mut eframe::Frame)
+    {
         egui::trace!(ui);
 
         self.integration_ui(ui, frame);
@@ -100,7 +110,8 @@ impl BackendPanel {
         }
     }
 
-    fn integration_ui(&mut self, ui: &mut egui::Ui, frame: &mut eframe::Frame) {
+    fn integration_ui(&mut self, ui: &mut egui::Ui, frame: &mut eframe::Frame)
+    {
         ui.horizontal(|ui| {
             ui.spacing_mut().item_spacing.x = 0.0;
             ui.label("Course Project: ");
@@ -125,21 +136,20 @@ impl BackendPanel {
         #[cfg(not(target_arch = "wasm32"))]
         {
             ui.horizontal(|ui| {
+                let mut fullscreen = frame.info().window_info.fullscreen;
+                if ui
+                    .checkbox(&mut fullscreen, "🗖 Fullscreen (F11)")
+                    .on_hover_text("Fullscreen the window")
+                    .changed()
                 {
-                    let mut fullscreen = frame.info().window_info.fullscreen;
-                    if ui
-                        .checkbox(&mut fullscreen, "🗖 Fullscreen (F11)")
-                        .on_hover_text("Fullscreen the window")
-                        .changed()
-                    {
-                        frame.set_fullscreen(fullscreen);
-                    }
+                    frame.set_fullscreen(fullscreen);
                 }
             });
         }
     }
 
-    fn pixels_per_point_ui(&mut self, ui: &mut egui::Ui, info: &eframe::IntegrationInfo) {
+    fn pixels_per_point_ui(&mut self, ui: &mut egui::Ui, info: &eframe::IntegrationInfo)
+    {
         let pixels_per_point = self
             .pixels_per_point
             .get_or_insert_with(|| ui.ctx().pixels_per_point());
@@ -186,7 +196,8 @@ impl BackendPanel {
         }
     }
 
-    fn run_mode_ui(&mut self, ui: &mut egui::Ui) {
+    fn run_mode_ui(&mut self, ui: &mut egui::Ui)
+    {
         ui.horizontal(|ui| {
             let run_mode = &mut self.run_mode;
             ui.label("Mode:");
@@ -222,7 +233,8 @@ impl BackendPanel {
 // ----------------------------------------------------------------------------
 
 // #[cfg_attr(feature = "serde", derive(serde::Deserialize, serde::Serialize))]
-struct EguiWindows {
+struct EguiWindows
+{
     // egui stuff:
     settings: bool,
     inspection: bool,
@@ -233,14 +245,18 @@ struct EguiWindows {
     output_event_history: std::collections::VecDeque<egui::output::OutputEvent>,
 }
 
-impl Default for EguiWindows {
-    fn default() -> Self {
+impl Default for EguiWindows
+{
+    fn default() -> Self
+    {
         Self::none()
     }
 }
 
-impl EguiWindows {
-    fn none() -> Self {
+impl EguiWindows
+{
+    fn none() -> Self
+    {
         Self {
             settings: false,
             inspection: false,
@@ -250,7 +266,8 @@ impl EguiWindows {
         }
     }
 
-    fn checkboxes(&mut self, ui: &mut egui::Ui) {
+    fn checkboxes(&mut self, ui: &mut egui::Ui)
+    {
         let Self {
             settings,
             inspection,
@@ -265,7 +282,8 @@ impl EguiWindows {
         ui.checkbox(output_events, "📤 Output Events");
     }
 
-    fn windows(&mut self, ctx: &egui::Context) {
+    fn windows(&mut self, ctx: &egui::Context)
+    {
         let Self {
             settings,
             inspection,

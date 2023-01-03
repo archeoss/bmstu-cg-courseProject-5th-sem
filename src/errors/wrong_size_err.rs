@@ -10,7 +10,8 @@ pub struct WrongSizeErr
 
 impl WrongSizeErr
 {
-    #[must_use] pub fn new(method: &str, frame_size: usize, buffer_size: usize) -> Self
+    #[must_use]
+    pub fn new(method: &str, frame_size: usize, buffer_size: usize) -> Self
     {
         Self {
             method: method.to_string(),

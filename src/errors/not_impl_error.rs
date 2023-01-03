@@ -8,7 +8,8 @@ pub struct NotImplError
 
 impl NotImplError
 {
-    #[must_use] pub fn new(method: &str) -> Self
+    #[must_use]
+    pub fn new(method: &str) -> Self
     {
         Self {
             method: method.to_string(),

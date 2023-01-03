@@ -2,7 +2,7 @@ use crate::managers::transform_manager::Visitor;
 use crate::models::frame_model::Point;
 use crate::objects::object::Object;
 use crate::objects::visibility::Visibility;
-use cgmath::{Matrix4};
+use cgmath::Matrix4;
 
 pub struct Camera
 {

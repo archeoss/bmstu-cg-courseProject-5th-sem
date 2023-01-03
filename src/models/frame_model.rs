@@ -73,7 +73,8 @@ impl FrameFigure
         &self.edges
     }
 
-    #[must_use] pub fn get_name(&self) -> &str
+    #[must_use]
+    pub fn get_name(&self) -> &str
     {
         "FrameFigure"
     }
