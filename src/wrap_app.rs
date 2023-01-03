@@ -1,5 +1,4 @@
-#[cfg(feature = "glow")]
-use eframe::glow;
+
 
 #[cfg(target_arch = "wasm32")]
 use core::any::Any;
@@ -47,7 +46,7 @@ pub struct WrapApp
 
 impl WrapApp
 {
-    pub fn new(_cc: &eframe::CreationContext<'_>) -> Self
+    #[must_use] pub fn new(_cc: &eframe::CreationContext<'_>) -> Self
     {
         #[allow(unused_mut)]
         let mut slf = Self {
@@ -195,7 +194,7 @@ impl WrapApp
             {
                 selected_anchor = anchor.to_owned();
                 if frame.is_web() {
-                    ui.output().open_url(format!("#{}", anchor));
+                    ui.output().open_url(format!("#{anchor}"));
                 }
             }
         }
@@ -218,7 +217,7 @@ impl WrapApp
 
     fn ui_file_drag_and_drop(&mut self, ctx: &egui::Context)
     {
-        use egui::*;
+        use egui::{Align2, Color32, Id, LayerId, Order, TextBuffer, TextStyle};
         use std::fmt::Write as _;
 
         // Preview hovering files:

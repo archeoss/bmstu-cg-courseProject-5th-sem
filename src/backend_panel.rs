@@ -9,7 +9,7 @@ enum RunMode {
 
 impl Default for RunMode {
     fn default() -> Self {
-        RunMode::Reactive
+        Self::Reactive
     }
 }
 
@@ -172,8 +172,7 @@ impl BackendPanel {
                 if ui
                     .add_enabled(enabled, egui::Button::new("Reset"))
                     .on_hover_text(format!(
-                        "Reset scale to native value ({:.1})",
-                        native_pixels_per_point
+                        "Reset scale to native value ({native_pixels_per_point:.1})"
                     ))
                     .clicked()
                 {
@@ -236,7 +235,7 @@ struct EguiWindows {
 
 impl Default for EguiWindows {
     fn default() -> Self {
-        EguiWindows::none()
+        Self::none()
     }
 }
 
@@ -320,7 +319,7 @@ impl EguiWindows {
                     .stick_to_bottom(true)
                     .show(ui, |ui| {
                         for event in output_event_history {
-                            ui.label(format!("{:?}", event));
+                            ui.label(format!("{event:?}"));
                         }
                     });
             });

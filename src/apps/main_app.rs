@@ -5,7 +5,7 @@ use crate::managers::load_manager::LoadManager;
 use crate::managers::transform_manager::TransformManager;
 use crate::models::frame_model::FrameFigure;
 use crate::models::model::Model;
-use egui::{containers::*, widgets::*, *};
+use egui::{containers::{CollapsingHeader, Frame}, widgets::{TextBuffer, Widget}, Color32, Painter, Shape, Stroke, Ui};
 use std::cell::RefCell;
 use std::rc::Rc;
 // use egui_extras::RetainedImage;
@@ -199,7 +199,7 @@ impl MainApp
                 if ui.button("Rotate").clicked() {
                     let mut models = self.models.borrow_mut().clone();
                     let mut mngr = self.transform_manager.borrow_mut();
-                    let mut to_transform = mngr.get_to_transform();
+                    let to_transform = mngr.get_to_transform();
                     let mut iter = to_transform.iter();
                     models.retain(|_| *iter.next().unwrap());
                     mngr.rotate_models(&mut models, self.rot);
@@ -285,7 +285,7 @@ impl MainApp
                         }
                         Err(e) => {
                             self.error_window = true;
-                            self.error_str = String::from(format!("Error: {e}"));
+                            self.error_str = format!("Error: {e}");
                         }
                     }
                 }

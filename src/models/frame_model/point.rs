@@ -1,4 +1,4 @@
-use cgmath::{num_traits::Float, BaseFloat, Matrix4, Point3, Transform, Vector4};
+use cgmath::{num_traits::Float, BaseFloat, Matrix4, Point3, Transform};
 use std::ops;
 
 #[derive(Copy, Clone)]

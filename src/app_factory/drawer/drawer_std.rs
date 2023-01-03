@@ -236,7 +236,7 @@ impl FrameDrawer for DrawerSTD
 
         let height = self.canvas.as_ref().borrow_mut().get_height();
         let width = self.canvas.as_ref().borrow_mut().get_width();
-        let center = Point::new(width as f64 / 2.0, height as f64 / 2.0, 0.0);
+        let center = Point::new(f64::from(width) / 2.0, f64::from(height) / 2.0, 0.0);
         for i in 0..edges.len() {
             let edge = edges[i];
             let start = points[edge.from];

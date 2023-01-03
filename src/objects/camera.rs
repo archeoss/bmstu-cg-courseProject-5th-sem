@@ -2,7 +2,7 @@ use crate::managers::transform_manager::Visitor;
 use crate::models::frame_model::Point;
 use crate::objects::object::Object;
 use crate::objects::visibility::Visibility;
-use cgmath::{Matrix4, Vector4};
+use cgmath::{Matrix4};
 
 pub struct Camera
 {
@@ -36,7 +36,7 @@ impl Camera
         self.pos += Point::new(mov.0, mov.1, mov.2);
     }
 
-    pub fn pitch(&mut self, grad: f64)
+    pub fn pitch(&mut self, _grad: f64)
     {
         // let matr = Matrix4::from_angle_x(grad);
     }
@@ -59,7 +59,7 @@ impl Object for Camera
         visitor.visit_camera(self)
     }
 
-    fn transform(&mut self, transform: Matrix4<f64>)
+    fn transform(&mut self, _transform: Matrix4<f64>)
     {
         // let vec = Vector4::new(
         //     self.pos.get_x(),

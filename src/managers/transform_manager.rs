@@ -45,7 +45,7 @@ impl TransformManager
     {
         let transform = Matrix4::from_translation(Vector3::new(dx, dy, dz));
 
-        println!("Transform: {:?}", transform);
+        println!("Transform: {transform:?}");
         obj.borrow_mut().transform_first(transform);
     }
 
@@ -97,12 +97,12 @@ impl TransformManager
         mv: (f64, f64, f64),
     )
     {
-        if models.len() == 0 {
+        if models.is_empty() {
             return;
         }
         let transform = Matrix4::from_translation(Vector3::new(mv.0, mv.1, mv.2));
 
-        println!("Transform: {:?}", transform);
+        println!("Transform: {transform:?}");
         for model in models.iter_mut() {
             model.borrow_mut().transform_first(transform);
         }
@@ -114,7 +114,7 @@ impl TransformManager
         rot: (f64, f64, f64),
     )
     {
-        if models.len() == 0 {
+        if models.is_empty() {
             return;
         }
 
@@ -144,7 +144,7 @@ impl TransformManager
         scale: (f64, f64, f64),
     )
     {
-        if models.len() == 0 {
+        if models.is_empty() {
             return;
         }
         let transform = Matrix4::from_nonuniform_scale(scale.0, scale.1, scale.2);
