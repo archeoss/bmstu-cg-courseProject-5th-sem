@@ -12,23 +12,16 @@ description = "Course project for BMSTU, CG course"
 crate-type = ["cdylib", "rlib"]
 
 [dependencies]
-glium = "0.32.1"
-slint = "0.3.0"
-tiny-skia = "0.7"
 cgmath = "0.18.0"
 rfd = "0.10.0"
-futures = "0.3.5"
 chrono = { version = "0.4", features = ["js-sys", "wasmbind"] }
 eframe = { version = "0.20.0", default-features = false }
 egui = { version = "0.20.0", features = [
   "extra_debug_asserts",
 ] }
-tracing = "0.1"
 
 bytemuck = { version = "1.7.1", optional = true }
 egui_extras = { version = "0.20.0"  }
-ehttp = { version = "0.2.0", optional = true}
-poll-promise = { version = "0.2", optional = true, default-features = false }
 
 # feature "persistence":
 serde = { version = "1", optional = true, features = ["derive"] }
