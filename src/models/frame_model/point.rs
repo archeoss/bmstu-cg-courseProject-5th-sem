@@ -1,86 +1,91 @@
-use cgmath::{Matrix4, Point3, Transform};
+use cgmath::{num_traits::Float, BaseFloat, Matrix4, Point3, Transform, Vector4};
 use std::ops;
 
 #[derive(Copy, Clone)]
-pub struct Point
+pub struct Point<T: Float>
 {
-    x: f32,
-    y: f32,
-    z: f32,
+    x: T,
+    y: T,
+    z: T,
 }
 
-impl Point
+impl<T: BaseFloat + Float + std::ops::MulAssign + std::ops::AddAssign> Point<T>
 {
-    #[must_use] pub fn new(x: f32, y: f32, z: f32) -> Self
+    #[must_use]
+    pub fn new(x: T, y: T, z: T) -> Self
     {
         Self { x, y, z }
     }
 
-    #[must_use] pub fn get_x(&self) -> f32
+    #[must_use]
+    pub fn get_x(&self) -> T
     {
         self.x
     }
 
-    #[must_use] pub fn get_y(&self) -> f32
+    #[must_use]
+    pub fn get_y(&self) -> T
     {
         self.y
     }
 
-    #[must_use] pub fn get_z(&self) -> f32
+    #[must_use]
+    pub fn get_z(&self) -> T
     {
         self.z
     }
 
-    pub fn set_x(&mut self, x: f32)
+    pub fn set_x(&mut self, x: T)
     {
         self.x = x;
     }
 
-    pub fn set_y(&mut self, y: f32)
+    pub fn set_y(&mut self, y: T)
     {
         self.y = y;
     }
 
-    pub fn set_z(&mut self, z: f32)
+    pub fn set_z(&mut self, z: T)
     {
         self.z = z;
     }
 
-    #[must_use] pub fn get_position(&self) -> (f32, f32, f32)
+    #[must_use]
+    pub fn get_position(&self) -> (T, T, T)
     {
         (self.x, self.y, self.z)
     }
 
-    pub fn set_position(&mut self, x: f32, y: f32, z: f32)
+    pub fn set_position(&mut self, x: T, y: T, z: T)
     {
         self.x = x;
         self.y = y;
         self.z = z;
     }
 
-    pub(crate) fn transform(&self, transform: &Matrix4<f32>) -> Self
+    pub(crate) fn transform(&self, transform: &Matrix4<T>) -> Self
     {
-        let mut point = Point3::<f32>::new(self.x, self.y, self.z);
+        let mut point = Point3::<T>::new(self.x, self.y, self.z);
         point = transform.transform_point(point);
 
-        Self::new(point.x, point.y, point.z)
+        Self::new(point.x as T, point.y as T, point.z as T)
     }
 
-    fn move_coord(&mut self, x: f32, y: f32, z: f32)
+    fn move_coord(&mut self, x: T, y: T, z: T)
     {
         self.x += x;
         self.y += y;
         self.z += z;
     }
 
-    fn scale_coord(&mut self, x: f32, y: f32, z: f32)
+    fn scale_coord(&mut self, x: T, y: T, z: T)
     {
         self.x *= x;
         self.y *= y;
         self.z *= z;
     }
 
-    fn rotate_coord(&mut self, _x: f32, _y: f32, _z: f32)
+    fn rotate_coord(&mut self, _x: T, _y: T, _z: T)
     {
         // let x_rad = x.to_radians();
         // let y_rad = y.to_radians();
@@ -111,7 +116,7 @@ impl Point
     }
 }
 
-impl ops::Add for Point
+impl<T: Float> ops::Add for Point<T>
 {
     type Output = Self;
 
@@ -125,7 +130,7 @@ impl ops::Add for Point
     }
 }
 
-impl ops::Sub for Point
+impl<T: Float> ops::Sub for Point<T>
 {
     type Output = Self;
 
@@ -139,8 +144,18 @@ impl ops::Sub for Point
     }
 }
 
-// impl ops::Mul for Matrix4<>
-impl ops::Mul for Point
+// impl<T> ops::Mul for Matrix4<T>
+// {
+//     type Output = Vector4<T>;
+//
+//     fn mul(self, other: Point<T>)
+//     {
+//         let vec = Vector4::new(other.get_x(), other.get_y(), other.get_z(), 1);
+//         self * other
+//     }
+// }
+//
+impl<T: Float> ops::Mul for Point<T>
 {
     type Output = Self;
 
@@ -154,7 +169,22 @@ impl ops::Mul for Point
     }
 }
 
-impl ops::Div for Point
+// impl<T> ops::Mul for Point<T>
+// {
+//     fn mul(self, other: Matrix4<T>)
+//     {
+//         let vec = Vector4::new(other.get_x(), other.get_y(), other.get_z(), 1);
+//         let p = vec * other;
+//
+//         Self {
+//             x: p.x,
+//             y: p.y,
+//             z: p.z,
+//         }
+//     }
+// }
+
+impl<T: Float> ops::Div for Point<T>
 {
     type Output = Self;
 
@@ -168,7 +198,7 @@ impl ops::Div for Point
     }
 }
 
-impl ops::AddAssign for Point
+impl<T: Float + std::ops::AddAssign> ops::AddAssign for Point<T>
 {
     fn add_assign(&mut self, other: Self)
     {
@@ -178,7 +208,7 @@ impl ops::AddAssign for Point
     }
 }
 
-impl ops::SubAssign for Point
+impl<T: Float + std::ops::SubAssign> ops::SubAssign for Point<T>
 {
     fn sub_assign(&mut self, other: Self)
     {
@@ -188,7 +218,7 @@ impl ops::SubAssign for Point
     }
 }
 
-impl ops::MulAssign for Point
+impl<T: Float + std::ops::MulAssign> ops::MulAssign for Point<T>
 {
     fn mul_assign(&mut self, other: Self)
     {
@@ -198,7 +228,7 @@ impl ops::MulAssign for Point
     }
 }
 
-impl ops::DivAssign for Point
+impl<T: Float + std::ops::DivAssign> ops::DivAssign for Point<T>
 {
     fn div_assign(&mut self, other: Self)
     {

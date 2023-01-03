@@ -14,20 +14,22 @@ use std::rc::Rc;
 #[derive(Clone)]
 pub struct FrameFigure
 {
-    points: Vec<Point>,
+    points: Vec<Point<f64>>,
     edges: Vec<Edge>,
 }
 
 #[derive(Clone)]
 pub struct FrameModel
 {
+    name: String,
     figure: Rc<RefCell<FrameFigure>>,
-    transform: Matrix4<f32>,
+    transform: Matrix4<f64>,
 }
 
 impl FrameFigure
 {
-    #[must_use] pub fn new() -> Self
+    #[must_use]
+    pub fn new() -> Self
     {
         Self {
             points: Vec::new(),
@@ -35,7 +37,8 @@ impl FrameFigure
         }
     }
 
-    #[must_use] pub fn new_with_points(points: Vec<Point>) -> Self
+    #[must_use]
+    pub fn new_with_points(points: Vec<Point<f64>>) -> Self
     {
         Self {
             points,
@@ -43,7 +46,8 @@ impl FrameFigure
         }
     }
 
-    #[must_use] pub fn new_with_edges(edges: Vec<Edge>) -> Self
+    #[must_use]
+    pub fn new_with_edges(edges: Vec<Edge>) -> Self
     {
         Self {
             points: Vec::new(),
@@ -51,22 +55,30 @@ impl FrameFigure
         }
     }
 
-    #[must_use] pub fn new_with_points_and_edges(points: Vec<Point>, edges: Vec<Edge>) -> Self
+    #[must_use]
+    pub fn new_with_points_and_edges(points: Vec<Point<f64>>, edges: Vec<Edge>) -> Self
     {
         Self { points, edges }
     }
 
-    #[must_use] pub fn get_points(&self) -> &Vec<Point>
+    #[must_use]
+    pub fn get_points(&self) -> &Vec<Point<f64>>
     {
         &self.points
     }
 
-    #[must_use] pub fn get_edges(&self) -> &Vec<Edge>
+    #[must_use]
+    pub fn get_edges(&self) -> &Vec<Edge>
     {
         &self.edges
     }
 
-    pub fn get_points_mut(&mut self) -> &mut Vec<Point>
+    pub fn get_name(&self) -> &str
+    {
+        "FrameFigure"
+    }
+
+    pub fn get_points_mut(&mut self) -> &mut Vec<Point<f64>>
     {
         &mut self.points
     }
@@ -76,7 +88,7 @@ impl FrameFigure
         &mut self.edges
     }
 
-    pub fn add_point(&mut self, point: Point)
+    pub fn add_point(&mut self, point: Point<f64>)
     {
         self.points.push(point);
     }
@@ -96,17 +108,19 @@ impl FrameFigure
         self.edges.remove(index);
     }
 
-    #[must_use] pub fn get_point(&self, index: usize) -> &Point
+    #[must_use]
+    pub fn get_point(&self, index: usize) -> &Point<f64>
     {
         &self.points[index]
     }
 
-    #[must_use] pub fn get_edge(&self, index: usize) -> &Edge
+    #[must_use]
+    pub fn get_edge(&self, index: usize) -> &Edge
     {
         &self.edges[index]
     }
 
-    pub fn get_point_mut(&mut self, index: usize) -> &mut Point
+    pub fn get_point_mut(&mut self, index: usize) -> &mut Point<f64>
     {
         &mut self.points[index]
     }
@@ -116,7 +130,8 @@ impl FrameFigure
         &mut self.edges[index]
     }
 
-    #[must_use] pub fn get_center(&self) -> Point
+    #[must_use]
+    pub fn get_center(&self) -> Point<f64>
     {
         let mut max = self.points[0];
         let mut min = self.points[0];
@@ -140,13 +155,14 @@ impl FrameFigure
 
 impl FrameModel
 {
-    pub(crate) fn new(figure: Rc<RefCell<FrameFigure>>) -> Self
+    pub(crate) fn new(figure: Rc<RefCell<FrameFigure>>, name: String) -> Self
     {
         Self {
             figure,
             transform: Matrix4::new(
                 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0,
             ),
+            name,
         }
     }
 }
@@ -159,18 +175,26 @@ impl Model for FrameModel
         self.figure.clone()
     }
 
-    fn get_center(&self) -> Point
+    fn get_name(&self) -> &str
+    {
+        &self.name
+    }
+    fn get_center(&self) -> Point<f64>
     {
         self.figure.borrow().get_center()
     }
 
-    fn get_transform(&self) -> Matrix4<f32>
+    fn get_transform(&self) -> Matrix4<f64>
     {
         self.transform
     }
-    fn transform(&mut self, transform: Matrix4<f32>)
+    fn transform(&mut self, transform: Matrix4<f64>)
     {
         self.transform = self.transform * transform;
+    }
+    fn transform_first(&mut self, transform: Matrix4<f64>)
+    {
+        self.transform = transform * self.transform;
     }
 }
 
@@ -196,9 +220,13 @@ impl Object for FrameModel
     {
         visitor.visit_model(self);
     }
-    fn transform(&mut self, transform: Matrix4<f32>)
+    fn transform(&mut self, transform: Matrix4<f64>)
     {
         self.transform = self.transform * transform;
+    }
+    fn transform_first(&mut self, transform: Matrix4<f64>)
+    {
+        self.transform = transform * self.transform;
     }
     // fn get_type(&self) -> ObjectType
     // {

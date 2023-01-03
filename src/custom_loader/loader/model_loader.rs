@@ -10,7 +10,8 @@ pub struct ModelLoader;
 
 impl ModelLoader
 {
-    #[must_use] pub fn new() -> Self
+    #[must_use]
+    pub fn new() -> Self
     {
         Self
     }
@@ -27,7 +28,10 @@ impl Loader<FrameModel> for ModelLoader
         file_loader.close();
 
         let mut builder = FrameModelBuilder::new();
-
-        builder.add_points(&points).add_edges(&edges).build()
+        let name: Vec<&str> = filename.trim().split('/').collect();
+        builder
+            .add_points(&points)
+            .add_edges(&edges)
+            .build(name[name.len() - 1].split('.').collect::<Vec<&str>>()[0].to_string())
     }
 }

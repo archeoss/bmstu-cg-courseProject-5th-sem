@@ -7,17 +7,18 @@ use std::rc::Rc;
 use crate::app_factory::canvas_factory::canvas::Canvas;
 use crate::models::frame_model::{FrameFigure, Point};
 use crate::models::model::Model;
-
+use crate::objects::camera::Camera;
 pub struct DrawerSTD
 {
     canvas: Rc<RefCell<Box<dyn Canvas>>>,
+    pov: Option<Rc<RefCell<Camera>>>,
 }
 
 impl DrawerSTD
 {
     pub fn new(canvas: Rc<RefCell<Box<dyn Canvas>>>) -> Self
     {
-        Self { canvas }
+        Self { canvas, pov: None }
     }
 
     fn bresenham(
@@ -189,7 +190,14 @@ impl Drawer for DrawerSTD
     {
         self.bresenham(x_start, y_start, x_end, y_end, color);
     }
-    fn draw_line_aa(&mut self, _x_start: i32, _y_start: i32, _x_end: i32, _y_end: i32, _color: [u8; 4])
+    fn draw_line_aa(
+        &mut self,
+        _x_start: i32,
+        _y_start: i32,
+        _x_end: i32,
+        _y_end: i32,
+        _color: [u8; 4],
+    )
     {
         // self.wu(x_start, y_start, x_end, y_end, color);
     }
@@ -228,7 +236,7 @@ impl FrameDrawer for DrawerSTD
 
         let height = self.canvas.as_ref().borrow_mut().get_height();
         let width = self.canvas.as_ref().borrow_mut().get_width();
-        let center = Point::new(width as f32 / 2.0, height as f32 / 2.0, 0.0);
+        let center = Point::new(width as f64 / 2.0, height as f64 / 2.0, 0.0);
         for i in 0..edges.len() {
             let edge = edges[i];
             let start = points[edge.from];

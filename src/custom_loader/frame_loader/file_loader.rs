@@ -17,7 +17,8 @@ pub struct FileFrameLoader
 
 impl FileFrameLoader
 {
-    #[must_use] pub fn new() -> Self
+    #[must_use]
+    pub fn new() -> Self
     {
         Self {
             /*file: None,*/ buffer: None,
@@ -55,14 +56,14 @@ impl FrameLoader for FileFrameLoader
         self.buffer = None;
     }
 
-    fn read_points(&mut self) -> Result<Vec<Point>, Box<dyn Error>>
+    fn read_points(&mut self) -> Result<Vec<Point<f64>>, Box<dyn Error>>
     {
         let reader = self.buffer.as_mut().unwrap();
 
         let mut line = String::new();
         reader.read_line(&mut line)?;
         let n: i64 = line.trim().parse()?;
-        let mut points = Vec::<Point>::with_capacity(n as usize);
+        let mut points = Vec::<Point<f64>>::with_capacity(n as usize);
 
         for _ in 0..n {
             line = String::new();

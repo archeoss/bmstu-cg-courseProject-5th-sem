@@ -1,15 +1,33 @@
-slint::include_modules!();
-pub mod app_factory;
-pub mod custom_loader;
-pub mod errors;
-pub mod managers;
-pub mod models;
-pub mod objects;
-
-#[cfg_attr(target_arch = "wasm32", wasm_bindgen::prelude::wasm_bindgen(start))]
-pub fn main()
+// When compiling natively:
+fn main()
 {
-    let factory = (app_factory::create_app("slint-skia")).unwrap();
-    let app = factory.make(1300, 1000);
-    app.launch();
+    {
+        // Silence wgpu log spam (https://github.com/gfx-rs/wgpu/issues/3206)
+        let mut rust_log = std::env::var("RUST_LOG").unwrap_or_else(|_| "info".to_owned());
+        for loud_crate in ["naga", "wgpu_core", "wgpu_hal"] {
+            if !rust_log.contains(&format!("{loud_crate}=")) {
+                rust_log += &format!(",{loud_crate}=warn");
+            }
+        }
+        std::env::set_var("RUST_LOG", rust_log);
+    }
+
+    // Log to stdout (if you run with `RUST_LOG=debug`).
+    tracing_subscriber::fmt::init();
+
+    let options = eframe::NativeOptions {
+        drag_and_drop_support: true,
+
+        initial_window_size: Some([1280.0, 1024.0].into()),
+
+        #[cfg(feature = "wgpu")]
+        renderer: eframe::Renderer::Wgpu,
+
+        ..Default::default()
+    };
+    eframe::run_native(
+        "egui demo app",
+        options,
+        Box::new(|cc| Box::new(bmstu_cg_courseProject_5th_sem::WrapApp::new(cc))),
+    );
 }

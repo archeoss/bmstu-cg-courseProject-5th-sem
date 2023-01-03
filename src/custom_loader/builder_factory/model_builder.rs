@@ -6,14 +6,15 @@ use std::rc::Rc;
 
 pub struct FrameModelBuilder
 {
-    points: Option<Vec<Point>>,
+    points: Option<Vec<Point<f64>>>,
     edges: Option<Vec<Edge>>,
     model: Option<FrameModel>,
 }
 
 impl FrameModelBuilder
 {
-    #[must_use] pub fn new() -> Self
+    #[must_use]
+    pub fn new() -> Self
     {
         Self {
             points: None,
@@ -22,7 +23,7 @@ impl FrameModelBuilder
         }
     }
 
-    pub fn add_points(&mut self, points: &Vec<Point>) -> &mut Self
+    pub fn add_points(&mut self, points: &Vec<Point<f64>>) -> &mut Self
     {
         self.points = Some(points.clone());
 
@@ -39,7 +40,7 @@ impl FrameModelBuilder
 
 impl Builder<FrameModel> for FrameModelBuilder
 {
-    fn build(&mut self) -> Result<Box<FrameModel>, Box<dyn Error>>
+    fn build(&mut self, name: String) -> Result<Box<FrameModel>, Box<dyn Error>>
     {
         let figure = FrameFigure::new_with_points_and_edges(
             self.points.clone().ok_or("")?,
@@ -47,6 +48,6 @@ impl Builder<FrameModel> for FrameModelBuilder
         );
         let figure = Rc::new(RefCell::new(figure));
 
-        Ok(Box::new(FrameModel::new(figure)))
+        Ok(Box::new(FrameModel::new(figure, name)))
     }
 }

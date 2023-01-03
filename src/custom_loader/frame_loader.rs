@@ -10,6 +10,6 @@ pub trait FrameLoader
     fn is_open(&self) -> bool;
     fn close(&mut self);
 
-    fn read_points(&mut self) -> Result<Vec<Point>, Box<dyn Error>>;
+    fn read_points(&mut self) -> Result<Vec<Point<f64>>, Box<dyn Error>>;
     fn read_edges(&mut self) -> Result<Vec<Edge>, Box<dyn Error>>;
 }

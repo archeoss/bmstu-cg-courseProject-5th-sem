@@ -6,14 +6,39 @@ use cgmath::{Matrix4, Vector4};
 
 pub struct Camera
 {
-    projection_point: Point,
+    pos: Point<f64>,
+    target: Point<f64>,
+    up: Point<f64>,
+    view_port: (f64, f64),
+    fov: f64,
+    near: f64,
+    far: f64,
 }
 
 impl Camera
 {
-    #[must_use] pub fn new(projection_point: Point) -> Self
+    #[must_use]
+    pub fn new(pos: Point<f64>) -> Self
     {
-        Self { projection_point }
+        Self {
+            pos,
+            target: Point::new(0.0, 0.0, 0.0),
+            up: Point::new(0.0, 0.0, 0.0),
+            view_port: (800.0, 600.0),
+            fov: 90.0,
+            near: 1.0,
+            far: 100.0,
+        }
+    }
+
+    pub fn move_camera(&mut self, mov: (f64, f64, f64))
+    {
+        self.pos += Point::new(mov.0, mov.1, mov.2);
+    }
+
+    pub fn pitch(&mut self, grad: f64)
+    {
+        // let matr = Matrix4::from_angle_x(grad);
     }
 }
 
@@ -34,16 +59,24 @@ impl Object for Camera
         visitor.visit_camera(self)
     }
 
-    fn transform(&mut self, transform: Matrix4<f32>)
+    fn transform(&mut self, transform: Matrix4<f64>)
     {
-        let vec = Vector4::new(
-            self.projection_point.get_x(),
-            self.projection_point.get_y(),
-            self.projection_point.get_z(),
-            1.0,
-        );
-        let point: Vector4<f32> = transform * vec;
-        self.projection_point = Point::new(point.x, point.y, point.z);
+        // let vec = Vector4::new(
+        //     self.pos.get_x(),
+        //     self.pos.get_y(),
+        //     self.pos.get_z(),
+        //     1.0,
+        // );
+        // let point: Vector4<f32> = transform * vec;
+        // let point: Vector4<f64> = transform * self.pos;
+        // self.pos = Point::new(point.x, point.y, point.z);
+
+        // let vec = Vector4::new(self.pos.get_x(), self.pos.get_y(), self.pos.get_z(), 1.0);
+    }
+
+    fn transform_first(&mut self, _transform: Matrix4<f64>)
+    {
+        // self.transform = transform * self.transform;
     }
 }
 
