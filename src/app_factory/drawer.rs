@@ -1,11 +1,10 @@
+use crate::errors::not_impl_error::NotImplError;
 use crate::models::frame_model::FrameFigure;
 use std::cell::RefCell;
 use std::error::Error;
 use std::rc::Rc;
-// use std::sync::{Arc, Mutex};
-// use errors::notImplError::NotImplError;
-use crate::errors::not_impl_error::NotImplError;
 
+#[allow(clippy::module_name_repetitions)]
 pub mod drawer_std;
 use crate::app_factory::canvas_factory::canvas::Canvas;
 use crate::models::model::Model;
@@ -23,6 +22,7 @@ pub trait Drawer
     fn get_frame(&self) -> Vec<u8>;
 }
 
+#[allow(clippy::module_name_repetitions)]
 pub trait FrameDrawer: Drawer
 {
     fn draw_frame_model(&mut self, frame_model: Rc<RefCell<Box<dyn Model<Output = FrameFigure>>>>);
@@ -46,6 +46,7 @@ impl DrawerFactory<DrawerSTD> for FactoryDrawerSTD
 // I didn't find a way to implement this via single function
 // I'm dumb
 
+#[allow(clippy::module_name_repetitions)]
 pub fn create_drawer(
     interface: &'static str,
     canvas: Rc<RefCell<Box<dyn Canvas>>>,
@@ -64,6 +65,7 @@ pub fn create_drawer(
     }
 }
 
+#[allow(clippy::module_name_repetitions)]
 pub fn create_frame_drawer(
     interface: &'static str,
     canvas: Rc<RefCell<Box<dyn Canvas>>>,

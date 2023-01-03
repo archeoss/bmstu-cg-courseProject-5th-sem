@@ -48,12 +48,7 @@ impl DrawerSTD
         let dy = (y_end - y_start).abs();
         let mut err = dx / 2;
         let mut y = y_start;
-        let ystep: i32;
-        if y_start < y_end {
-            ystep = 1;
-        } else {
-            ystep = -1;
-        }
+        let ystep = if y_start < y_end { 1 } else { -1 };
         for x in x_start..=x_end {
             if is_steep {
                 points.push((y, x));
@@ -224,6 +219,7 @@ impl Drawer for DrawerSTD
     }
 }
 
+#[allow(clippy::cast_possible_truncation)]
 impl FrameDrawer for DrawerSTD
 {
     fn draw_frame_model(&mut self, frame_model: Rc<RefCell<Box<dyn Model<Output = FrameFigure>>>>)
@@ -237,8 +233,7 @@ impl FrameDrawer for DrawerSTD
         let height = self.canvas.as_ref().borrow_mut().get_height();
         let width = self.canvas.as_ref().borrow_mut().get_width();
         let center = Point::new(f64::from(width) / 2.0, f64::from(height) / 2.0, 0.0);
-        for i in 0..edges.len() {
-            let edge = edges[i];
+        for edge in edges {
             let start = points[edge.from];
             let end = points[edge.to];
             let start = center - start.transform(&tr);

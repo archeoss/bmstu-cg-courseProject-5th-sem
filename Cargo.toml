@@ -6,6 +6,8 @@ edition = "2021"
 license = "GPL-3.0"
 repository = "https://github.com/archeoss/bmstu-cg-courseProject-5th-sem"
 description = "Course project for BMSTU, CG course"
+keywords = ["egui", "3D", "CG", "z-buffer", "Solid of revolution"]
+categories = ["CG", "BMSTU"]
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [lib]
