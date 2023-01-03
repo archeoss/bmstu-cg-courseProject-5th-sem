@@ -5,12 +5,12 @@ use core::any::Any;
 
 #[derive(Default)]
 // #[cfg_attr(feature = "serde", derive(serde::Deserialize, serde::Serialize))]
-pub struct FractalClockApp
+pub struct MainAppWrap
 {
     fractal_clock: crate::apps::MainApp,
 }
 
-impl eframe::App for FractalClockApp
+impl eframe::App for MainAppWrap
 {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame)
     {
@@ -29,7 +29,7 @@ impl eframe::App for FractalClockApp
 // #[cfg_attr(feature = "serde", serde(default))]
 pub struct State
 {
-    clock: FractalClockApp,
+    clock: MainAppWrap,
     selected_anchor: String,
     backend_panel: super::backend_panel::BackendPanel,
 }
@@ -118,6 +118,8 @@ impl eframe::App for WrapApp
 
         self.state.backend_panel.update(ctx, frame);
 
+        self.backend_panel(ctx, frame);
+
         self.show_selected_app(ctx, frame);
 
         self.state.backend_panel.end_of_frame(ctx);
@@ -183,6 +185,8 @@ impl WrapApp
 
         ui.separator();
 
+        ui.toggle_value(&mut self.state.backend_panel.open, "💻 Backend");
+
         ui.separator();
 
         let mut selected_anchor = self.state.selected_anchor.clone();
@@ -216,7 +220,7 @@ impl WrapApp
 
     fn ui_file_drag_and_drop(&mut self, ctx: &egui::Context)
     {
-        use egui::{Align2, Color32, Id, LayerId, Order, TextBuffer, TextStyle};
+        use egui::{Align2, Color32, Id, LayerId, Order, TextStyle};
         use std::fmt::Write as _;
 
         // Preview hovering files:

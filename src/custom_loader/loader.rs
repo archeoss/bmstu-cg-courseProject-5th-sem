@@ -1,6 +1,7 @@
 use crate::models::frame_model::FrameModel;
 use std::error::Error;
 
+#[allow(clippy::module_name_repetitions)]
 pub mod model_loader;
 
 pub trait Loader<T>
@@ -8,6 +9,7 @@ pub trait Loader<T>
     fn load(&self, filename: &str) -> Result<Box<T>, Box<dyn Error>>;
 }
 
+#[allow(clippy::module_name_repetitions)]
 pub trait LoaderFactory<T>
 {
     fn create() -> Result<Box<dyn Loader<T>>, Box<dyn Error>>;

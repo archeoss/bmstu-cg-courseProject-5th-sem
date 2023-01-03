@@ -8,6 +8,7 @@ use std::env;
 use std::fs::File;
 use std::io::{BufRead, BufReader};
 
+#[derive(Default)]
 pub struct FileFrameLoader
 {
     // file: Option<File>,
@@ -18,7 +19,7 @@ pub struct FileFrameLoader
 impl FileFrameLoader
 {
     #[must_use]
-    pub fn new() -> Self
+    pub const fn new() -> Self
     {
         Self {
             /*file: None,*/ buffer: None,
@@ -44,10 +45,7 @@ impl FrameLoader for FileFrameLoader
 
     fn is_open(&self) -> bool
     {
-        match self.buffer {
-            None => false,
-            Some(_) => true,
-        }
+        self.buffer.is_some()
     }
 
     fn close(&mut self)
@@ -58,12 +56,17 @@ impl FrameLoader for FileFrameLoader
 
     fn read_points(&mut self) -> Result<Vec<Point<f64>>, Box<dyn Error>>
     {
-        let reader = self.buffer.as_mut().unwrap();
+        let Some(reader) = self.buffer.as_mut() else {
+            return Err(Box::new(ReadErr::new(
+                    stringify!(read_points),
+                    self.filename.clone(),
+                )));
+        };
 
         let mut line = String::new();
         reader.read_line(&mut line)?;
-        let n: i64 = line.trim().parse()?;
-        let mut points = Vec::<Point<f64>>::with_capacity(n as usize);
+        let n: usize = line.trim().parse()?;
+        let mut points = Vec::<Point<f64>>::with_capacity(n);
 
         for _ in 0..n {
             line = String::new();
@@ -84,12 +87,17 @@ impl FrameLoader for FileFrameLoader
 
     fn read_edges(&mut self) -> Result<Vec<Edge>, Box<dyn Error>>
     {
-        let reader = self.buffer.as_mut().unwrap();
+        let Some(reader) = self.buffer.as_mut() else {
+            return Err(Box::new(ReadErr::new(
+                    stringify!(read_points),
+                    self.filename.clone(),
+                )));
+        };
 
         let mut line = String::new();
         reader.read_line(&mut line)?;
-        let n: i64 = line.trim().parse()?;
-        let mut edges = Vec::<Edge>::with_capacity(n as usize);
+        let n: usize = line.trim().parse()?;
+        let mut edges = Vec::<Edge>::with_capacity(n);
 
         for _ in 0..n {
             line = String::new();
@@ -104,12 +112,8 @@ impl FrameLoader for FileFrameLoader
                     return Err(Box::new(ReadErr::new("read_edges", self.filename.clone())));
                 }
             }
-
-            match parts.next() {
-                Some(Ok(_)) => {
-                    return Err(Box::new(ReadErr::new("read_edges", self.filename.clone())));
-                }
-                _ => {}
+            if let Some(Ok(_)) = parts.next() {
+                return Err(Box::new(ReadErr::new("read_edges", self.filename.clone())));
             }
         }
 

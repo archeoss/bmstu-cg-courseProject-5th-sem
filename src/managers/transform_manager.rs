@@ -5,6 +5,7 @@ use cgmath::{Matrix4, Vector3};
 use std::cell::RefCell;
 use std::rc::Rc;
 
+#[derive(Default)]
 pub struct TransformManager
 {
     to_transform: Vec<bool>,
@@ -13,7 +14,7 @@ pub struct TransformManager
 impl TransformManager
 {
     #[must_use]
-    pub fn new() -> Self
+    pub const fn new() -> Self
     {
         Self {
             to_transform: Vec::new(),
@@ -37,7 +38,7 @@ impl TransformManager
 
     pub fn move_model(
         &mut self,
-        obj: Rc<RefCell<Box<dyn Model<Output = FrameFigure>>>>,
+        obj: &Rc<RefCell<Box<dyn Model<Output = FrameFigure>>>>,
         dx: f64,
         dy: f64,
         dz: f64,
@@ -51,7 +52,7 @@ impl TransformManager
 
     pub fn rotate_model(
         &mut self,
-        obj: Rc<RefCell<Box<dyn Model<Output = FrameFigure>>>>,
+        obj: &Rc<RefCell<Box<dyn Model<Output = FrameFigure>>>>,
         ox: f64,
         oy: f64,
         oz: f64,
@@ -80,7 +81,7 @@ impl TransformManager
 
     pub fn scale_model(
         &mut self,
-        obj: Rc<RefCell<Box<dyn Model<Output = FrameFigure>>>>,
+        obj: &Rc<RefCell<Box<dyn Model<Output = FrameFigure>>>>,
         kx: f64,
         ky: f64,
         kz: f64,

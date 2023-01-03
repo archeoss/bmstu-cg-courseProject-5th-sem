@@ -3,11 +3,20 @@ use crate::models::frame_model::FrameFigure;
 use crate::models::model::Model;
 use std::error::Error;
 pub struct LoadManager;
+
+impl Default for LoadManager
+{
+    fn default() -> Self
+    {
+        Self::new()
+    }
+}
+
 impl LoadManager
 {
     // ...
     #[must_use]
-    pub fn new() -> Self
+    pub const fn new() -> Self
     {
         Self
     }

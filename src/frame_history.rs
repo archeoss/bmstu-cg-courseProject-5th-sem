@@ -119,8 +119,8 @@ impl FrameHistory
         let right_side_time = ui.input().time; // Time at right side of screen
 
         for (time, cpu_usage) in history.iter() {
-            let age = (right_side_time - time) as f32;
-            let pos = to_screen.transform_pos_clamped(Pos2::new(age, cpu_usage));
+            let age = right_side_time - time;
+            let pos = to_screen.transform_pos_clamped(Pos2::new(age as f32, cpu_usage));
 
             shapes.push(Shape::line_segment(
                 [pos2(pos.x, rect.bottom()), pos],

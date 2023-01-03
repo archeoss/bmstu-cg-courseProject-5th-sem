@@ -1,5 +1,7 @@
 use egui::Widget;
 
+use crate::frame_history::FrameHistory;
+
 /// How often we repaint the demo app by default
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 enum RunMode
@@ -45,11 +47,11 @@ impl Default for BackendPanel
     {
         Self {
             open: false,
-            run_mode: Default::default(),
+            run_mode: RunMode::default(),
             repaint_after_seconds: 1.0,
             pixels_per_point: None,
-            frame_history: Default::default(),
-            egui_windows: Default::default(),
+            frame_history: FrameHistory::default(),
+            egui_windows: EguiWindows::default(),
         }
     }
 }
@@ -231,7 +233,7 @@ impl BackendPanel
 }
 
 // ----------------------------------------------------------------------------
-
+//
 // #[cfg_attr(feature = "serde", derive(serde::Deserialize, serde::Serialize))]
 struct EguiWindows
 {
@@ -262,7 +264,7 @@ impl EguiWindows
             inspection: false,
             memory: false,
             output_events: false,
-            output_event_history: Default::default(),
+            output_event_history: std::collections::VecDeque::default(),
         }
     }
 

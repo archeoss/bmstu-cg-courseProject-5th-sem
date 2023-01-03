@@ -6,12 +6,13 @@ use crate::custom_loader::loader::Loader;
 use crate::models::frame_model::FrameModel;
 use std::error::Error;
 
+#[derive(Default)]
 pub struct ModelLoader;
 
 impl ModelLoader
 {
     #[must_use]
-    pub fn new() -> Self
+    pub const fn new() -> Self
     {
         Self
     }

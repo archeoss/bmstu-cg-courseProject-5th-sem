@@ -25,7 +25,7 @@ impl Debug for ReadErr
     {
         write!(
             f,
-            "Incorrect: {{ file : ile!(, line: {}, method: {}, filename: {} }}",
+            "Incorrect: {{ file : line: {}, method: {}, filename: {} }}",
             line!(),
             self.method,
             self.filename

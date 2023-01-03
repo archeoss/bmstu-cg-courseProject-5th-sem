@@ -7,7 +7,7 @@ use crate::models::frame_model::FrameFigure;
 use crate::models::model::Model;
 use egui::{
     containers::{CollapsingHeader, Frame},
-    widgets::{TextBuffer, Widget},
+    widgets::Widget,
     Color32, Painter, Shape, Stroke, Ui,
 };
 use std::cell::RefCell;
@@ -327,9 +327,7 @@ impl MainApp
             )
             .unwrap(),
         ));
-        let drawer = Rc::new(RefCell::new(
-            create_frame_drawer("std", canvas).unwrap(),
-        ));
+        let drawer = Rc::new(RefCell::new(create_frame_drawer("std", canvas).unwrap()));
         //
         // let mut pixmap =
         //     tiny_skia::PixmapMut::from_bytes(pixel_buffer.make_mut_bytes(), width, height).unwrap();
