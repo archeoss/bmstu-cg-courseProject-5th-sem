@@ -1,0 +1,161 @@
+\begin{thebibliography}{10}
+\def\selectlanguageifdefined#1{
+\expandafter\ifx\csname date#1\endcsname\relax
+\else\language\csname l@#1\endcsname\fi}
+\ifx\undefined\url\def\url#1{{\small #1}}\else\fi
+\ifx\undefined\BibUrl\def\BibUrl#1{\url{#1}}\else\fi
+\ifx\undefined\BibAnnote\long\def\BibAnnote#1{(#1)}\else\fi
+\ifx\undefined\BibEmph\def\BibEmph#1{\emph{#1}}\else\fi
+
+\bibitem{termin-cg}
+\selectlanguageifdefined{russian}
+Т.О.~Перемитина. Компьютерная графика :
+  учебное пособие.
+\newblock --- Томск: Эль Контент, 2012.
+\newblock {с.}~114.
+
+\bibitem{revolution}
+\selectlanguageifdefined{russian}
+Middlemiss; Marks; Smart. '15-4. Surfaces of Revolution'. Analytic Geometry
+  (3rd ed.). p. 378.
+\newblock \url{https://lccn.loc.gov/68015472}.
+\newblock 1968.
+
+\bibitem{aaymodelmethod}
+\selectlanguageifdefined{russian}
+Юрьевич~Аксенов~Алексей. Модели и методы
+  обработки и представления сложных
+  пространственных объектов.
+\newblock --- СПИИРАН, 2015.
+\newblock {с.}~110.
+
+\bibitem{roders}
+\selectlanguageifdefined{russian}
+Д.~Роджерс. Алгоритмические основы
+  машинной графики: Пер. с англ.
+\newblock --- СПб: БХВ-Петербург, 1989.
+\newblock {с.}~512.
+
+\bibitem{porev}
+\selectlanguageifdefined{russian}
+Н.~Порев~В. Компьютерная графика.
+\newblock --- СПб.: БХВ-Петербург, 2002.
+\newblock {с.}~429.
+
+\bibitem{raytr}
+\selectlanguageifdefined{russian}
+Трассировка лучей в реальном времени.
+\newblock Режим доступа:
+  \url{https://www.ixbt.com/3dv/directx-raytracing.html} (дата
+  обращения: 13.08.2022).
+
+\bibitem{tracer_proof}
+\selectlanguageifdefined{russian}
+Cost Analysis of a Ray Tracing Algorithm.
+\newblock Режим доступа:
+  \url{https://www.graphics.cornell.edu/~bjw/mca.pdf} (дата
+  обращения: 05.09.2022).
+
+\bibitem{zbuf}
+\selectlanguageifdefined{russian}
+Алгоритм Z-буфера.
+\newblock Режим доступа: \url{http://compgraph.tpu.ru/zbuffer.htm}
+  (дата обращения: 21.08.2022).
+
+\bibitem{robert}
+\selectlanguageifdefined{russian}
+Алгоритм Робертса.
+\newblock Режим доступа: \url{http://compgraph.tpu.ru/roberts.htm}
+  (дата обращения: 14.05.2022).
+
+\bibitem{rogers}
+\selectlanguageifdefined{russian}
+Д.~Роджерс. Алгоритмические основы
+  машинной графики.
+\newblock 1989.
+
+\bibitem{lmodels}
+\selectlanguageifdefined{russian}
+Модели затенения. Плоская модель.
+  Затенение по Гуро и Фонгу.
+\newblock Режим доступа:
+  \url{https://compgraphics.info/3D/lighting/shading\_model.php} (дата
+  обращения: 18.06.2022).
+
+\bibitem{rust}
+\selectlanguageifdefined{russian}
+Rust [Электронный ресурс].
+\newblock Режим доступа: \url{https://www.rust-lang.org/}.
+\newblock Дата обращения: 19.10.2022.
+
+\bibitem{borrow-checker}
+\selectlanguageifdefined{russian}
+Rust Borrow Checker [Электронный ресурс].
+\newblock
+  \url{https://doc.rust-lang.org/book/ch04-02-references-and-borrowing.html}.
+
+\bibitem{egui}
+\selectlanguageifdefined{russian}
+egui: an easy-to-use immediate mode GUI in Rust [Электронный
+  ресурс].
+\newblock \url{https://github.com/emilk/egui}.
+
+\bibitem{tiny-skia}
+\selectlanguageifdefined{russian}
+A tiny Skia subset ported to Rust [Электронный ресурс].
+\newblock \url{https://github.com/RazrFalcon/tiny-skia}.
+
+\bibitem{cargo}
+\selectlanguageifdefined{russian}
+The Cargo Book.
+\newblock Режим доступа: \url{https://doc.rust-lang.org/cargo/}
+  (дата обращения: 21.07.2022).
+
+\bibitem{lsp}
+\selectlanguageifdefined{russian}
+Language Server Protocol (LSP).
+\newblock Режим доступа:
+  \url{https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/}
+  (дата обращения: 21.12.2022).
+
+\bibitem{rust-anal}
+\selectlanguageifdefined{russian}
+Rust Analuzer.
+\newblock Режим доступа: \url{https://rust-analyzer.github.io/}
+  (дата обращения: 21.12.2022).
+
+\bibitem{rust-learn}
+\selectlanguageifdefined{russian}
+Rustbook. What is Ownership?
+\newblock Режим доступа:
+  \url{https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html} (дата
+  обращения: 20.11.2022).
+
+\bibitem{vim}
+\selectlanguageifdefined{russian}
+VIM the editor.
+\newblock Режим доступа: \url{https://www.vim.org/} (дата
+  обращения: 24.11.2022).
+
+\bibitem{vim-plugins}
+\selectlanguageifdefined{russian}
+VimAwesome.
+\newblock Режим доступа: \url{https://vimawesome.com/} (дата
+  обращения: 24.11.2022).
+
+\bibitem{arch}
+\selectlanguageifdefined{russian}
+Arch Linux [Электронный ресурс].
+\newblock Режим доступа: \url{https://archlinux.org/}.
+\newblock Дата обращения: 19.10.2022.
+
+\bibitem{i5}
+\selectlanguageifdefined{russian}
+Процессор Intel\textsuperscript{\tiny\textregistered}
+  Core\textsuperscript{\tiny\texttrademark} i5-11320H [Электронный
+  ресурс].
+\newblock Режим доступа:
+  \url{https://ark.intel.com/content/www/ru/ru/ark/products/217183/intel-core-i511320h-processor-8m-cache-up-to-4-50-ghz-with-ipu.html}.
+\newblock Дата обращения: 19.10.2022.
+
+\end{thebibliography}

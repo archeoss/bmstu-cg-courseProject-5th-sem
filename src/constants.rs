@@ -1,0 +1,2 @@
+pub const BASE_CAMERA_SPEED: f64 = 2.0;
+pub const CAMERA_MULTIPLIER_SPEED: f64 = 1.4;

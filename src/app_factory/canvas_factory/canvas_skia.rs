@@ -24,10 +24,18 @@ impl Canvas for CanvasSkia
             frame: vec![0_u8; (width * height * 4) as usize],
         }
     }
-    fn point(&mut self, x: i32, y: i32, color: [u8; 4])
+    fn point(&mut self, x: i32, y: i32, mut color: [u8; 4], br: f64)
     {
-        let i = ((x + y * self.width as i32) * 4) as usize;
-
+        // let (x, y) = (
+        //     x as f64 + self.width as f64 / 2.0,
+        //     y as f64 + self.height as f64 / 2.0,
+        // );
+        // println!("{x} | {y}");
+        let i = ((x as i32 + y as i32 * self.width as i32) * 4) as usize;
+        for ind in 0..3 {
+            color[ind] = (color[ind] as f64 * br) as u8;
+        }
+        // println!("{br}");
         if i + 3 < self.frame.len() && i > 0 {
             self.frame[i..i + 4].copy_from_slice(&color);
         }
@@ -38,7 +46,7 @@ impl Canvas for CanvasSkia
         surface.copy_from_slice(&self.frame);
     }
 
-    fn get_frame(&self) -> &[u8]
+    fn frame(&self) -> &[u8]
     {
         &self.frame[..]
     }
@@ -68,11 +76,11 @@ impl Canvas for CanvasSkia
         }
     }
 
-    fn get_width(&self) -> u32
+    fn width(&self) -> u32
     {
         self.width
     }
-    fn get_height(&self) -> u32
+    fn height(&self) -> u32
     {
         self.height
     }

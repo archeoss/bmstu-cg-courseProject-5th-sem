@@ -1,4 +1,5 @@
 use crate::custom_loader::builder_factory::model_builder::FrameModelBuilder;
+use crate::custom_loader::builder_factory::model_builder::Models;
 use crate::custom_loader::builder_factory::Builder;
 use crate::custom_loader::frame_loader::file_loader::FileFrameLoader;
 use crate::custom_loader::frame_loader::FrameLoader;
@@ -26,6 +27,7 @@ impl Loader<FrameModel> for ModelLoader
         file_loader.open(filename)?;
         let points = file_loader.read_points()?;
         let edges = file_loader.read_edges()?;
+        let triangles = file_loader.read_triang()?;
         file_loader.close();
 
         let mut builder = FrameModelBuilder::new();
@@ -33,6 +35,10 @@ impl Loader<FrameModel> for ModelLoader
         builder
             .add_points(&points)
             .add_edges(&edges)
-            .build(name[name.len() - 1].split('.').collect::<Vec<&str>>()[0].to_string())
+            .add_triangles(&triangles)
+            .build(
+                name[name.len() - 1].split('.').collect::<Vec<&str>>()[0].to_string(),
+                Models::FrameModel,
+            )
     }
 }

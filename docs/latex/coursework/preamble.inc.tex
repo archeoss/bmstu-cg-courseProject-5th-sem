@@ -1,0 +1,140 @@
+\documentclass[ut8x, 14pt, oneside, a4paper]{extarticle}
+\usepackage{extsizes}
+\usepackage{cmap} % Улучшенный поиск русских слов в полученном pdf-файле
+\usepackage[english,russian]{babel}
+\usepackage{fontspec}
+\setmainfont{Times New Roman}
+\usepackage{misccorr}
+\usepackage{indentfirst}
+\usepackage{enumitem}
+\setlength{\parindent}{1.25cm}
+\usepackage{multirow}
+\renewcommand{\baselinestretch}{1.5}
+\setlist{nolistsep} % Отсутствие отступов между элементами \enumerate и \itemize
+
+%\usepackage{pscyr} % Нормальные шрифты
+\usepackage{amsmath}
+\usepackage{geometry}
+\geometry{left=30mm}
+\geometry{right=15mm}
+\geometry{top=20mm}
+\geometry{bottom=20mm}
+% \usepackage{titlesec}
+% \titleformat{\section}
+% {\normalsize\bfseries}
+% {\thesection}
+% {1em}{}
+% \titlespacing*{\chapter}{0pt}{-30pt}{8pt}
+% \titlespacing*{\section}{\parindent}{*4}{*4}
+% \titlespacing*{\subsection}{\parindent}{*4}{*4}
+% \usepackage{setspace}
+% \onehalfspacing % Полуторный интервал
+% \frenchspacing
+% \usepackage{indentfirst} % Красная строка
+% \usepackage{titlesec}
+% \titleformat{\chapter}{\LARGE\bfseries}{\thechapter}{20pt}{\LARGE\bfseries}
+% \titleformat{\section}{\Large\bfseries}{\thesection}{20pt}{\Large\bfseries}
+\usepackage{listings}
+\usepackage{listings-rust}
+\usepackage{xcolor}
+\usepackage{pdfpages}
+\usepackage{enumerate}
+\lstdefinestyle{rust}{
+    language=Rust,
+    backgroundcolor=\color{white},
+    basicstyle=\footnotesize\ttfamily,
+    keywordstyle=\color{purple},
+    stringstyle=\color{green},
+    commentstyle=\color{gray},
+    numbers=left,
+    stepnumber=1,
+    numbersep=5pt,
+    frame=single,
+    tabsize=4,
+    captionpos=t,
+    breaklines=true,
+    breakatwhitespace=true,
+    escapeinside={\#*}{*)},
+    morecomment=[l][\color{magenta}]{\#},
+    columns=fullflexible
+}
+\usepackage{pgfplots}
+\usetikzlibrary{datavisualization}
+\usetikzlibrary{datavisualization.formats.functions}
+\usepackage{graphicx}
+\newcommand{\imgw}[3] {
+    \begin{figure}[!ht]
+        \center{\includegraphics[width=#1]{inc/img/#2}}
+        \caption{#3}
+        \label{img:#2}
+    \end{figure}
+}
+\newcommand{\img}[3] {
+    \begin{figure}[!ht]
+        \center{\includegraphics[height=#1]{inc/img/#2}}
+        \caption{#3}
+        \label{img:#2}
+    \end{figure}
+}
+\newcommand{\boximg}[3] {
+    \begin{figure}[!ht]
+        \center{\fbox{\includegraphics[height=#1]{assets/img/#2}}}
+        \caption{#3}
+        \label{img:#2}
+    \end{figure}
+}
+\usepackage[justification=centering]{caption} % Настройка подписей float объектов
+% \usepackage[unicode,pdftex]{hyperref} % Ссылки в pdf
+% \hypersetup{hidelinks}
+\newcommand{\code}[1]{\texttt{#1}}
+\usepackage{icomma} % Интеллектуальные запятые для десятичных чисел
+\usepackage{csvsimple}
+
+% Переопределение стандартных \section, \subsection, \subsubsection по ГОСТу;
+% Переопределение их отступов до и после для 1.5 интервала во всем документе
+
+\usepackage{titlesec}
+\usepackage{array}
+\newenvironment{signstabular}[1][1]{
+    \renewcommand*{\arraystretch}{#1}
+    \tabular
+    }{
+    \endtabular
+}
+
+
+% \filcenter
+% \titleformat{\section}[block]
+% {\bfseries\normalsize}{\thesection}{1em}{}
+\titlespacing{\section}{0mm}{0mm}{8mm}
+
+\titleformat{\subsection}[hang]
+{\bfseries\normalsize}{\thesubsection}{1em}{}
+\titlespacing\subsection{\parindent}{12mm}{12mm}
+
+\titleformat{\subsubsection}[hang]
+{\bfseries\normalsize}{\thesubsubsection}{1em}{}
+\titlespacing\subsubsection{\parindent}{12mm}{12mm}
+
+\titleformat{name=\section}[block]
+{\normalfont\normalsize\bfseries\hspace{\parindent}}
+{\thesection}
+{1em}
+{}
+\titleformat{name=\section,numberless}[block]
+{\normalfont\normalsize\bfseries\centering}
+{}
+{0pt}
+{}
+
+\newcommand{\anonsection}[1]{%
+    \section*{\centering#1}%
+    \addcontentsline{toc}{section}{#1}%
+}
+
+\newcommand{\specsection}[1]{
+    \section*{\centering#1}
+    \addcontentsline{toc}{section}{#1}
+}
+
+

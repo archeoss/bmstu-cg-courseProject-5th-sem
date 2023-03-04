@@ -1,5 +1,5 @@
 [package]
-name = "bmstu-cg-courseProject-5th-sem"
+name = "bmstu_cg_courseProject_5th_sem"
 version = "0.2.0"
 authors = ["Simeon Romanov <archeosAnacritis@gmail.com>"]
 edition = "2021"
@@ -13,40 +13,52 @@ categories = ["CG", "BMSTU"]
 [lib]
 crate-type = ["cdylib", "rlib"]
 
+[[bench]]
+name = "bench"
+harness = false
+
+[dev-dependencies]
+criterion = "0.3"
+
 [dependencies]
-cgmath = "0.18.0"
 rfd = "0.10.0"
 chrono = { version = "0.4", features = ["js-sys", "wasmbind"] }
 eframe = { version = "0.20.0", default-features = false }
 egui = { version = "0.20.0", features = [
   "extra_debug_asserts",
 ] }
-
-bytemuck = { version = "1.7.1", optional = true }
+paste = "*"
+# bytemuck = { version = "1.7.1", optional = true }
 egui_extras = { version = "0.20.0"  }
-
+nalgebra = "*"
 # feature "persistence":
 serde = { version = "1", optional = true, features = ["derive"] }
 
 
+ehttp = { version = "0.2.0", optional = true }
+image = { version = "0.24", optional = true, default-features = false, features = [
+  "jpeg",
+  "png",
+] }
+poll-promise = { version = "0.2", optional = true, default-features = false }
 
 [features]
 default = ["glow", "persistence"]
 
+http = ["ehttp", "image", "poll-promise", "egui_extras/image"]
 persistence = ["eframe/persistence", "egui/persistence", "serde"]
-screen_reader = ["eframe/screen_reader"]                          # experimental
+# screen_reader = ["eframe/screen_reader"]                          # experimental
 serde = ["dep:serde", "egui/serde"]
 
 glow = ["eframe/glow"]
-wgpu = ["eframe/wgpu", "bytemuck"]
+wgpu = ["eframe/wgpu"]#, "bytemuck"]
 
 [target.'cfg(not(target_arch = "wasm32"))'.dependencies]
 tracing-subscriber = "0.3"
 
 
 [target.'cfg(target_arch = "wasm32")'.dependencies]
-wasm-bindgen = { version = "0.2" }
-getrandom = { version = "0.2.2", features = ["js"] }
-wasm-bindgen-futures = "0.4.13"
-[build-dependencies]
-slint-build = "0.3.0"
+
+console_error_panic_hook = "0.1.6"
+tracing-wasm = "0.2"
+wasm-bindgen-futures = "0.4"

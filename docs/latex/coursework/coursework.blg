@@ -1,0 +1,60 @@
+This is BibTeX, Version 0.99d (TeX Live 2022/Arch Linux)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: coursework.aux
+A level-1 auxiliary file: 01-definitions.aux
+A level-1 auxiliary file: 02-abbreviations.aux
+A level-1 auxiliary file: 03-introduction.aux
+A level-1 auxiliary file: 04-analysis.aux
+A level-1 auxiliary file: 05-design.aux
+A level-1 auxiliary file: 06-implementation.aux
+A level-1 auxiliary file: 07-research.aux
+A level-1 auxiliary file: 08-conclusion.aux
+A level-1 auxiliary file: 09-biblio.aux
+The style file: utf8gost705u.bst
+Database file #1: biblio.bib
+Warning--empty booktitle in termin-cg
+Warning--empty booktitle in aaymodelmethod
+Warning--empty booktitle in roders
+Warning--empty booktitle in porev
+You've used 23 entries,
+            2958 wiz_defined-function locations,
+            758 strings with 8955 characters,
+and the built_in function-call counts, 3459 in all, are:
+= -- 392
+> -- 42
+< -- 4
++ -- 28
+- -- 5
+* -- 62
+:= -- 325
+add.period$ -- 59
+call.type$ -- 23
+change.case$ -- 0
+chr.to.int$ -- 0
+cite$ -- 27
+duplicate$ -- 209
+empty$ -- 453
+format.name$ -- 5
+if$ -- 917
+int.to.chr$ -- 0
+int.to.str$ -- 23
+missing$ -- 0
+newline$ -- 133
+num.names$ -- 13
+pop$ -- 154
+preamble$ -- 1
+purify$ -- 0
+quote$ -- 0
+skip$ -- 117
+stack$ -- 0
+substring$ -- 24
+swap$ -- 110
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 0
+warning$ -- 4
+while$ -- 9
+width$ -- 25
+write$ -- 295
+(There were 4 warnings)

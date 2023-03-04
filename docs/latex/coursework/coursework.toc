@@ -1,0 +1,39 @@
+\babel@toc {russian}{}\relax 
+\contentsline {section}{РЕФЕРАТ}{2}{}%
+\contentsline {section}{ОПРЕДЕЛЕНИЯ}{5}{}%
+\contentsline {section}{ОБОЗНАЧЕНИЯ И СОКРАЩЕНИЯ}{6}{}%
+\contentsline {section}{ВВЕДЕНИЕ}{7}{}%
+\contentsline {section}{\numberline {1}Аналитический раздел}{9}{}%
+\contentsline {subsection}{\numberline {1.1}Описание объектов сцены}{9}{}%
+\contentsline {subsection}{\numberline {1.2}Анализ методов создания моделей}{10}{}%
+\contentsline {subsubsection}{\numberline {1.2.1}Представление тел вращения}{10}{}%
+\contentsline {subsection}{\numberline {1.3}Способы описания трехмерных геометрических моделей на сцене}{11}{}%
+\contentsline {subsection}{\numberline {1.4}Способы задания поверхностных моделей}{13}{}%
+\contentsline {subsubsection}{\numberline {1.4.1}Понятие поверхности вращения}{15}{}%
+\contentsline {subsubsection}{\numberline {1.4.2}Формализация тела вращения}{16}{}%
+\contentsline {subsection}{\numberline {1.5}Анализ алгоритмов удаления невидимых линий и поверхностей}{18}{}%
+\contentsline {subsubsection}{\numberline {1.5.1}Алгоритм обратной трассировки лучей}{18}{}%
+\contentsline {subsubsection}{\numberline {1.5.2}Алгоритм, использующий Z-буфер}{19}{}%
+\contentsline {subsubsection}{\numberline {1.5.3}Алгоритм Робертса}{20}{}%
+\contentsline {subsection}{\numberline {1.6}Анализ методов закрашивания}{21}{}%
+\contentsline {subsubsection}{\numberline {1.6.1}Простая закраска}{21}{}%
+\contentsline {subsubsection}{\numberline {1.6.2}Закраска по Гуро}{22}{}%
+\contentsline {subsubsection}{\numberline {1.6.3}Закраска по Фонгу}{23}{}%
+\contentsline {section}{\numberline {2}Конструкторский раздел}{25}{}%
+\contentsline {subsection}{\numberline {2.1}Требования к программному обеспечению}{25}{}%
+\contentsline {subsection}{\numberline {2.2}Разработка алгоритмов}{25}{}%
+\contentsline {subsubsection}{\numberline {2.2.1}Алгоритм Z-буфера}{25}{}%
+\contentsline {subsubsection}{\numberline {2.2.2}Модифицированный алгоритм, использующий z-буфер}{27}{}%
+\contentsline {subsection}{\numberline {2.3}Выбор используемых типов и структур данных}{27}{}%
+\contentsline {section}{\numberline {3}Технологический раздел}{29}{}%
+\contentsline {subsection}{\numberline {3.1}Средства реализации}{29}{}%
+\contentsline {subsection}{\numberline {3.2}Структура классов}{30}{}%
+\contentsline {subsection}{\numberline {3.3}Реализация алгоритмов}{32}{}%
+\contentsline {subsection}{\numberline {3.4}Интерфейс программного обеспечения}{45}{}%
+\contentsline {section}{\numberline {4}Исследовательский раздел}{49}{}%
+\contentsline {subsection}{\numberline {4.1}Постановка эксперимента}{49}{}%
+\contentsline {subsubsection}{\numberline {4.1.1}Технические характеристики}{49}{}%
+\contentsline {subsubsection}{\numberline {4.1.2}Результаты эксперимента}{49}{}%
+\contentsline {section}{ЗАКЛЮЧЕНИЕ}{52}{}%
+\contentsline {section}{СПИСОК ИСПОЛЬЗОВАННЫХ ИСТОЧНИКОВ}{53}{}%
+\contentsline {section}{ПРИЛОЖЕНИЕ А}{56}{}%

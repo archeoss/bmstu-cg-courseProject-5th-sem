@@ -1,5 +1,6 @@
 use crate::errors::not_impl_error::NotImplError;
-use crate::models::frame_model::FrameFigure;
+use crate::models::frame_model::{FrameModel, Point};
+use crate::objects::camera::Camera;
 use std::cell::RefCell;
 use std::error::Error;
 use std::rc::Rc;
@@ -14,18 +15,27 @@ pub trait Drawer
 {
     fn set_canvas(&mut self, canvas: Rc<RefCell<Box<dyn Canvas>>>);
     fn draw_point(&mut self, x: i32, y: i32, color: [u8; 4]);
-    fn draw_line(&mut self, x_start: i32, y_start: i32, x_end: i32, y_end: i32, color: [u8; 4]);
+    fn draw_line(&mut self, start: (i32, i32, i32), end: (i32, i32, i32), color: [u8; 4]);
     fn draw_line_aa(&mut self, x_start: i32, y_start: i32, x_end: i32, y_end: i32, color: [u8; 4]);
     fn draw_ellipse(&mut self, x: i32, y: i32, width: i32, height: i32, color: [u8; 4]);
     fn copy_to(&self, buffer: &mut [u8]);
     fn fill(&mut self, color: [u8; 4]);
-    fn get_frame(&self) -> Vec<u8>;
+    fn frame(&self) -> Vec<u8>;
+    fn set_camera(&mut self, cam: Rc<RefCell<Camera>>);
 }
 
 #[allow(clippy::module_name_repetitions)]
 pub trait FrameDrawer: Drawer
 {
-    fn draw_frame_model(&mut self, frame_model: Rc<RefCell<Box<dyn Model<Output = FrameFigure>>>>);
+    fn draw_frame_model(
+        &mut self,
+        frame_models: &[Rc<RefCell<Box<dyn Model<Output = FrameModel>>>>],
+    );
+    fn draw_in_3d(
+        &mut self,
+        frame_models: &[Rc<RefCell<Box<dyn Model<Output = FrameModel>>>>],
+        light: Point<f64>,
+    );
 }
 
 trait DrawerFactory<Trait>

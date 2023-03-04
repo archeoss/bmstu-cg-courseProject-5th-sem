@@ -5,19 +5,16 @@ use core::any::Any;
 
 #[derive(Default)]
 // #[cfg_attr(feature = "serde", derive(serde::Deserialize, serde::Serialize))]
-pub struct MainAppWrap
-{
-    fractal_clock: crate::apps::MainApp,
+pub struct MainAppWrap {
+    course_project: crate::apps::MainApp,
 }
 
-impl eframe::App for MainAppWrap
-{
-    fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame)
-    {
+impl eframe::App for MainAppWrap {
+    fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
         egui::CentralPanel::default()
             .frame(egui::Frame::dark_canvas(&ctx.style()))
             .show(ctx, |ui| {
-                self.fractal_clock
+                self.course_project
                     .ui(ui, Some(crate::seconds_since_midnight()));
             });
     }
@@ -27,26 +24,22 @@ impl eframe::App for MainAppWrap
 #[derive(Default)]
 // #[cfg_attr(feature = "serde", derive(serde::Deserialize, serde::Serialize))]
 // #[cfg_attr(feature = "serde", serde(default))]
-pub struct State
-{
-    clock: MainAppWrap,
+pub struct State {
+    canvas: MainAppWrap,
     selected_anchor: String,
     backend_panel: super::backend_panel::BackendPanel,
 }
 
 /// Wraps many demo/test apps into one.
-pub struct WrapApp
-{
+pub struct WrapApp {
     state: State,
 
     dropped_files: Vec<egui::DroppedFile>,
 }
 
-impl WrapApp
-{
+impl WrapApp {
     #[must_use]
-    pub fn new(_cc: &eframe::CreationContext<'_>) -> Self
-    {
+    pub fn new(_cc: &eframe::CreationContext<'_>) -> Self {
         #[allow(unused_mut)]
         let mut slf = Self {
             state: State::default(),
@@ -64,32 +57,28 @@ impl WrapApp
         slf
     }
 
-    fn apps_iter_mut(&mut self) -> impl Iterator<Item = (&str, &str, &mut dyn eframe::App)>
-    {
+    fn apps_iter_mut(&mut self) -> impl Iterator<Item = (&str, &str, &mut dyn eframe::App)> {
         let vec = vec![(
-            "🕑 Fractal Clock",
-            "clock",
-            &mut self.state.clock as &mut dyn eframe::App,
+            "🕑 Canvas",
+            "canvas",
+            &mut self.state.canvas as &mut dyn eframe::App,
         )];
 
         vec.into_iter()
     }
 }
 
-impl eframe::App for WrapApp
-{
+impl eframe::App for WrapApp {
     // #[cfg(feature = "persistence")]
     // fn save(&mut self, storage: &mut dyn eframe::Storage) {
     //     eframe::set_value(storage, eframe::APP_KEY, &self.state);
     // }
 
-    fn clear_color(&self, visuals: &egui::Visuals) -> egui::Rgba
-    {
+    fn clear_color(&self, visuals: &egui::Visuals) -> egui::Rgba {
         visuals.panel_fill.into()
     }
 
-    fn update(&mut self, ctx: &egui::Context, frame: &mut eframe::Frame)
-    {
+    fn update(&mut self, ctx: &egui::Context, frame: &mut eframe::Frame) {
         #[cfg(target_arch = "wasm32")]
         if let Some(anchor) = frame.info().web_info.location.hash.strip_prefix('#') {
             self.state.selected_anchor = anchor.to_owned();
@@ -133,16 +122,13 @@ impl eframe::App for WrapApp
     }
 
     #[cfg(target_arch = "wasm32")]
-    fn as_any_mut(&mut self) -> Option<&mut dyn Any>
-    {
+    fn as_any_mut(&mut self) -> Option<&mut dyn Any> {
         Some(&mut *self)
     }
 }
 
-impl WrapApp
-{
-    fn backend_panel(&mut self, ctx: &egui::Context, frame: &mut eframe::Frame)
-    {
+impl WrapApp {
+    fn backend_panel(&mut self, ctx: &egui::Context, frame: &mut eframe::Frame) {
         // The backend-panel can be toggled on/off.
         // We show a little animation when the user switches it.
         let is_open = self.state.backend_panel.open || ctx.memory().everything_is_visible();
@@ -159,13 +145,11 @@ impl WrapApp
             });
     }
 
-    fn backend_panel_contents(&mut self, ui: &mut egui::Ui, frame: &mut eframe::Frame)
-    {
+    fn backend_panel_contents(&mut self, ui: &mut egui::Ui, frame: &mut eframe::Frame) {
         self.state.backend_panel.ui(ui, frame);
     }
 
-    fn show_selected_app(&mut self, ctx: &egui::Context, frame: &mut eframe::Frame)
-    {
+    fn show_selected_app(&mut self, ctx: &egui::Context, frame: &mut eframe::Frame) {
         let mut found_anchor = false;
         let selected_anchor = self.state.selected_anchor.clone();
         for (_name, anchor, app) in self.apps_iter_mut() {
@@ -179,8 +163,7 @@ impl WrapApp
         }
     }
 
-    fn bar_contents(&mut self, ui: &mut egui::Ui, frame: &mut eframe::Frame)
-    {
+    fn bar_contents(&mut self, ui: &mut egui::Ui, frame: &mut eframe::Frame) {
         egui::widgets::global_dark_light_mode_switch(ui);
 
         ui.separator();
@@ -218,8 +201,7 @@ impl WrapApp
         });
     }
 
-    fn ui_file_drag_and_drop(&mut self, ctx: &egui::Context)
-    {
+    fn ui_file_drag_and_drop(&mut self, ctx: &egui::Context) {
         use egui::{Align2, Color32, Id, LayerId, Order, TextStyle};
         use std::fmt::Write as _;
 
@@ -282,8 +264,7 @@ impl WrapApp
     }
 }
 
-fn clock_button(ui: &mut egui::Ui, seconds_since_midnight: f64) -> egui::Response
-{
+fn clock_button(ui: &mut egui::Ui, seconds_since_midnight: f64) -> egui::Response {
     let time = seconds_since_midnight;
     let time = format!(
         "{:02}:{:02}:{:02}.{:02}",

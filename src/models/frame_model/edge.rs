@@ -1,8 +1,10 @@
-#[derive(Copy, Clone)]
+use crate::macros::*;
+
+#[derive(Copy, Clone, Debug)]
 pub struct Edge
 {
-    pub from: usize,
-    pub to: usize,
+    from: usize,
+    to: usize,
 }
 
 impl Edge
@@ -13,30 +15,10 @@ impl Edge
         Self { from, to }
     }
 
-    #[must_use]
-    pub const fn get_from(&self) -> usize
-    {
-        self.from
-    }
+    getter_setter!(from: usize, to: usize);
 
     #[must_use]
-    pub const fn get_to(&self) -> usize
-    {
-        self.to
-    }
-
-    pub fn set_from(&mut self, from: usize)
-    {
-        self.from = from;
-    }
-
-    pub fn set_to(&mut self, to: usize)
-    {
-        self.to = to;
-    }
-
-    #[must_use]
-    pub const fn get_from_to(&self) -> (usize, usize)
+    pub const fn from_to(&self) -> (usize, usize)
     {
         (self.from, self.to)
     }

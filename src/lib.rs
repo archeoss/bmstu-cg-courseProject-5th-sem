@@ -1,6 +1,8 @@
 pub mod app_factory;
+pub mod constants;
 pub mod custom_loader;
 pub mod errors;
+pub mod macros;
 pub mod managers;
 pub mod models;
 pub mod objects;
@@ -16,8 +18,7 @@ use eframe::web::AppRunnerRef;
 pub use wrap_app::WrapApp;
 
 /// Time of day as seconds since midnight. Used for clock in demo app.
-pub(crate) fn seconds_since_midnight() -> f64
-{
+pub(crate) fn seconds_since_midnight() -> f64 {
     use chrono::Timelike;
     let time = chrono::Local::now().time();
     1e-9f64.mul_add(
@@ -33,25 +34,21 @@ use eframe::wasm_bindgen::{self, prelude::*};
 
 #[cfg(target_arch = "wasm32")]
 #[wasm_bindgen]
-pub struct WebHandle
-{
+pub struct WebHandle {
     handle: AppRunnerRef,
 }
 
 #[cfg(target_arch = "wasm32")]
 #[wasm_bindgen]
-impl WebHandle
-{
+impl WebHandle {
     #[wasm_bindgen]
-    pub fn stop_web(&self) -> Result<(), wasm_bindgen::JsValue>
-    {
+    pub fn stop_web(&self) -> Result<(), wasm_bindgen::JsValue> {
         let mut app = self.handle.lock();
         app.destroy()
     }
 
     #[wasm_bindgen]
-    pub fn set_some_content_from_javasript(&mut self, _some_data: &str)
-    {
+    pub fn set_some_content_from_javasript(&mut self, _some_data: &str) {
         let _app = self.handle.lock().app_mut::<WrapApp>();
         // _app.data = some_data;
     }
@@ -59,8 +56,7 @@ impl WebHandle
 
 #[cfg(target_arch = "wasm32")]
 #[wasm_bindgen]
-pub fn init_wasm_hooks()
-{
+pub fn init_wasm_hooks() {
     // Make sure panics are logged using `console.error`.
     console_error_panic_hook::set_once();
 
@@ -70,8 +66,7 @@ pub fn init_wasm_hooks()
 
 #[cfg(target_arch = "wasm32")]
 #[wasm_bindgen]
-pub async fn start_separate(canvas_id: &str) -> Result<WebHandle, wasm_bindgen::JsValue>
-{
+pub async fn start_separate(canvas_id: &str) -> Result<WebHandle, wasm_bindgen::JsValue> {
     let web_options = eframe::WebOptions::default();
     eframe::start_web(
         canvas_id,
@@ -88,8 +83,7 @@ pub async fn start_separate(canvas_id: &str) -> Result<WebHandle, wasm_bindgen::
 /// You can add more callbacks like this if you want to call in to your code.
 #[cfg(target_arch = "wasm32")]
 #[wasm_bindgen]
-pub async fn start(canvas_id: &str) -> Result<WebHandle, wasm_bindgen::JsValue>
-{
+pub async fn start(canvas_id: &str) -> Result<WebHandle, wasm_bindgen::JsValue> {
     init_wasm_hooks();
     start_separate(canvas_id).await
 }
