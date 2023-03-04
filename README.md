@@ -2,9 +2,8 @@
 Repository for course project, BMSTU, ICS7, 5th semester.
 
 # Language: Rust
-WebGL2, support for WASM
 
-With help of Slint and Tiny-Skia
+With help of egui
 
 ## Install build dependencies
 
@@ -20,19 +19,19 @@ cargo install wasm-pack
 Build the project and start a local server to host it:
 
 ```bash
-wasm-pack build --release --target web
-python3 -m http.server 8080
-```
+./sh/start_server.sh &
+./sh/build_demo_web.sh --open```
 
-Open http://localhost:8080/ in your browser to run the project.
+Open http://localhost:8888/ in your browser to run the project.
 
-The build files are stored in `./pkg/bmstu-cg-courseProject-5th-sem/`.
+The build files are stored in `./docs/bmstu-cg-courseProject-5th-sem.{js/wasm}`.
 
 ## Running on native targets
 
 ```bash
-cargo run --release --package bmstu-cg-courseProject-5th-sem
+cargo run --release 
+
 ```
+
 The build files are stored in `./target/bmstu-cg-courseProject-5th-sem/`.
 
-## About
