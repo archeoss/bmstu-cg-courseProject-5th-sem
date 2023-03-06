@@ -53,6 +53,24 @@ serde = ["dep:serde", "egui/serde"]
 glow = ["eframe/glow"]
 wgpu = ["eframe/wgpu"]#, "bytemuck"]
 
+[profile.release]
+# Optimize for size
+strip = true    # Strip symbols from binary; Turn off for cargo bloat command
+# opt-level = "s"
+lto = true    # Link Time optimization, causes a bit longer compilation
+codegen-units = 1   # Maximize size reduction optimization, causes longer compilation
+# Optimize for speed
+opt-level = 3 
+
+
+[profile.bench]
+strip = true    # Strip symbols from binary; Turn off for cargo bloat command
+# opt-level = "s"
+lto = true    # Link Time optimization, causes a bit longer compilation
+codegen-units = 1   # Maximize size reduction optimization, causes longer compilation
+# Optimize for speed
+opt-level = 3 
+
 [target.'cfg(not(target_arch = "wasm32"))'.dependencies]
 tracing-subscriber = "0.3"
 
